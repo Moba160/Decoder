@@ -447,7 +447,7 @@ function parseAndRenderDecoder(xmlDoc) {
     
     firmwareInfoEl.textContent = `${mName} | Firmwareversion: ${firmware?.getAttribute('version') || '?'}`;
     cvGroupsContainer.innerHTML = '';
-    groupNav.innerHTML = '<h4>Gruppen</h4>';
+    groupNav.innerHTML = '';
 
     // Standard DCC Group
     const standardGroup = createGroupElement("Standard-DCC-Variablen");

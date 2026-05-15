@@ -269,13 +269,6 @@ h1 {
     padding: 2rem;
 }
 
-.nav-list.empty::before {
-    content: '🔍';
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    opacity: 0.5;
-}
-
 .placeholder {
     color: var(--text-secondary);
     font-style: italic;
@@ -615,7 +608,7 @@ body.light-mode .reset-popover::before {
 
 .sidebar {
     position: sticky;
-    top: 1.5rem;
+    top: calc(var(--header-height) + 1.5rem);
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
@@ -686,12 +679,12 @@ body.light-mode .reset-popover::before {
 
 /* Accordion Group */
 .cv-group {
-    scroll-margin-top: 1.5rem;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     overflow: hidden;
+    scroll-margin-top: calc(var(--header-height) + 1.5rem);
     transition: all 0.3s;
 }
 
