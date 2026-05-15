@@ -578,6 +578,16 @@ body.light-mode .reset-popover::before {
     color: var(--text-primary);
 }
 
+.wip-icon {
+    margin-bottom: 1.5rem;
+    animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 .modal-actions {
     display: flex;
     gap: 1rem;

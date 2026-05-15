@@ -18,6 +18,7 @@ function updateDecoderCount(count) {
 let fileSelectionScreen, programmingScreen, backBtn, resetBtn, cvGroupsContainer, decoderNameEl, firmwareInfoEl, groupNav;
 let resetModal, resetConfirmBtn, resetCancelBtn, resetModalText;
 let manufacturerListEl, decoderListEl, searchInput, searchResultsEl, resManufacturerEl, resDecoderBtn, resDecoderList;
+let wipModal, wipCloseBtn;
 
 async function init() {
     fileSelectionScreen = document.getElementById('file-selection');
@@ -41,6 +42,9 @@ async function init() {
     resManufacturerEl = document.getElementById('res-manufacturer');
     resDecoderBtn = document.getElementById('res-decoder-btn');
     resDecoderList = document.getElementById('res-decoder-list');
+    wipModal = document.getElementById('wip-modal');
+    wipCloseBtn = document.getElementById('wip-close');
+    wipCloseBtn.addEventListener('click', () => wipModal.style.display = 'none');
 
     await loadData();
     renderManufacturers();
@@ -409,13 +413,16 @@ function handleReset() {
     if (!currentResetCommand) return;
     const [cv, val] = currentResetCommand.split('=');
     resetModalText.innerHTML = `Möchten Sie den Decoder wirklich auf Werkseinstellungen zurücksetzen?<br><br><strong>Befehl: CV ${cv} = ${val}</strong>`;
-    resetModal.style.display = 'block';
+            resetModal.style.display = 'block';
 }
 
 function performReset() {
     resetModal.style.display = 'none';
-    const [cv, val] = currentResetCommand.split('=');
-    alert(`Reset-Befehl (CV ${cv} = ${val}) gesendet!`);
+    showWipModal();
+}
+
+function showWipModal() {
+    if (wipModal) wipModal.style.display = 'flex';
 }
 
 function parseAndRenderDecoder(xmlDoc) {
@@ -591,6 +598,10 @@ function createLongAddrRow(groupNode, getCTElement) {
         cvValues[18] = addr & 255;
         updateDependencies();
     };
+
+    row.querySelectorAll('.btn-read').forEach(btn => btn.onclick = showWipModal);
+    row.querySelectorAll('.btn-write').forEach(btn => btn.onclick = showWipModal);
+
     return row;
 }
 
@@ -694,6 +705,9 @@ function createCvRow(cvNode, getCTElement) {
         cvValues[number] = baseVal; updateUIFromValue(baseVal); updateDependencies();
         document.querySelectorAll('.speed-curve-canvas').forEach(c => drawSpeedCurve(c));
     });
+
+    row.querySelectorAll('.btn-read').forEach(btn => btn.onclick = showWipModal);
+    row.querySelectorAll('.btn-write').forEach(btn => btn.onclick = showWipModal);
 
     return row;
 }
