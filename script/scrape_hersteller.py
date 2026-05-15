@@ -4,7 +4,7 @@ import json
 import os
 import re
 
-TEST_MODE = True # Auf True setzen, um nur cT/Tran und D&H zu crawlen
+TEST_MODE = False # Auf True setzen, um nur cT/Tran und D&H zu crawlen
 
 def main():
     url = "https://www.decoderdb.de/datenbank/hersteller"
@@ -52,7 +52,7 @@ def main():
             resp.raise_for_status()
             h_soup = BeautifulSoup(resp.text, 'html.parser')
             
-            d_rows = h_soup.select('table.datatable-table tbody tr')
+            d_rows = h_soup.select('table.datatable tbody tr')
             
             if d_rows:
                 for d_row in d_rows:
@@ -107,10 +107,18 @@ def main():
     # Decoder ermittelt, nun für jeden Decoder die Firmware laden
     print(f"\nSuche Firmware-Informationen für alle Decoder...")
     
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_file = os.path.join(os.path.dirname(script_dir), 'decoder', 'decoderdaten.json')
+
+    def flush_json(fertige_liste):
+        """Schreibt den aktuellen Stand der Liste sofort in die JSON-Datei."""
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(fertige_liste, f, ensure_ascii=False, indent=4)
+
     firmware_cache = {} # URL -> List of applicable decoders
     
     for i, hersteller in enumerate(hersteller_liste):
-        print(f"[{i+1}/{len(hersteller_liste)}] Verarbeite Decoder für: {hersteller['name']}...")
+        print(f"[{i+1}/{len(hersteller_liste)}] Verarbeite Decoder für: {hersteller['name']}...")    
         
         for d in hersteller.get('decoder', []):
             d['latest_firmware_url'] = None
@@ -162,15 +170,12 @@ def main():
                         d['applicable_decoders'] = app_decoders
             except Exception as e:
                 pass
-    
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    output_file = os.path.join(os.path.dirname(script_dir), 'decoder', 'hersteller_detailed.json')
-    
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(hersteller_liste, f, ensure_ascii=False, indent=4)
         
-    print(f"\nErfolg! {len(hersteller_liste)} Hersteller gefunden.")
-    print(f"Die Daten wurden in '{output_file}' gespeichert.")
+        # Nach jedem Hersteller sofort in Datei schreiben
+        flush_json(hersteller_liste[:i+1])
+        print(f"  -> Zwischenstand gespeichert ({i+1}/{len(hersteller_liste)} Hersteller).")
+    
+    print(f"\nErfolg! {len(hersteller_liste)} Hersteller gespeichert in '{output_file}'.")
 
 if __name__ == "__main__":
     # Prüfe ob Abhängigkeiten vorhanden sind

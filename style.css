@@ -9,6 +9,20 @@
     --success: #22c55e;
     --danger: #ef4444;
     --header-height: 70px;
+    --header-bg: rgba(15, 23, 42, 0.8);
+    --body-gradient: radial-gradient(circle at top right, #1e293b, #0f172a);
+}
+
+body.light-mode {
+    --bg-color: #f1f5f9;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --accent-color: #0284c7;
+    --accent-hover: #0369a1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --header-bg: rgba(241, 245, 249, 0.9);
+    --body-gradient: radial-gradient(circle at top right, #e2e8f0, #f1f5f9);
 }
 
 * {
@@ -22,8 +36,9 @@ body {
     background-color: var(--bg-color);
     color: var(--text-primary);
     min-height: 100vh;
-    background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
+    background-image: var(--body-gradient);
     padding-bottom: 2rem;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 header {
@@ -37,15 +52,40 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(15, 23, 42, 0.8);
+    background: var(--header-bg);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+#theme-toggle {
+    background: rgba(128, 128, 128, 0.15);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    line-height: 1;
+    padding: 0;
+}
+
+#theme-toggle:hover {
+    background: rgba(128, 128, 128, 0.3);
+    transform: rotate(15deg) scale(1.1);
 }
 
 h1 {
     font-size: 1.5rem;
     font-weight: 800;
-    background: linear-gradient(to right, #38bdf8, #818cf8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-primary);
 }
 
 #back-btn {
@@ -267,6 +307,21 @@ h1 {
     border-left: 3px solid var(--accent-color);
 }
 
+.license-notice {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.license-notice a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.license-notice a:hover {
+    text-decoration: underline;
+}
+
 .filter-section {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -366,6 +421,61 @@ tbody tr:hover {
 
 .in-prod { color: #10b981; }
 .out-prod { color: #ef4444; }
+
+.btn-preset-spur {
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 0.55rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    letter-spacing: 0.03em;
+}
+
+.btn-preset-spur:hover {
+    background: var(--accent-color);
+    color: #082f49;
+}
+
+.reset-container {
+    position: relative;
+}
+
+.reset-popover {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    min-width: 320px;
+    z-index: 500;
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(16px);
+}
+
+.reset-popover h3 {
+    margin-bottom: 0.75rem;
+    color: var(--danger);
+    font-size: 1rem;
+}
+
+.reset-popover p {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+body.light-mode .reset-popover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+}
 
 .header-row {
     display: flex;
@@ -848,4 +958,128 @@ tbody tr:hover {
             "num name"
             "val act";
     }
+}
+
+/* ============================
+   Light Mode Overrides
+   ============================ */
+body.light-mode .search-results-overlay {
+    background: #ffffff;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .dropdown-content {
+    background-color: #ffffff;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .dropdown-content a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .dropbtn {
+    color: #ffffff;
+}
+
+body.light-mode .res-label {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .nav-list-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .nav-list-item.selected {
+    background: linear-gradient(90deg, rgba(2, 132, 199, 0.1), transparent);
+}
+
+body.light-mode .filter-group input,
+body.light-mode .filter-group select {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+body.light-mode .cv-value-input,
+body.light-mode .cv-value-select {
+    background: #f8fafc;
+}
+
+body.light-mode .cv-value-select option {
+    background: #ffffff;
+    color: #0f172a;
+}
+
+body.light-mode .cv-group-header {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+body.light-mode .cv-group-header:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .group-hint {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+body.light-mode .speed-curve-container {
+    background: #e2e8f0;
+}
+
+body.light-mode .bit-container {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+body.light-mode .bit-select {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+body.light-mode .btn-preset {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .btn-secondary {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .btn-read { color: #ffffff; }
+body.light-mode .btn-write { color: #ffffff; }
+
+body.light-mode .btn-preset-spur {
+    background: rgba(2, 132, 199, 0.1);
+}
+
+body.light-mode .btn-preset-spur:hover {
+    color: #ffffff;
+}
+
+body.light-mode .cv-dependency-hint {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode th {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode tbody tr:hover {
+    background: rgba(2, 132, 199, 0.08);
+}
+
+body.light-mode .modal-content {
+    background: #ffffff;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+body.light-mode .sidebar {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+body.light-mode .nav-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .nav-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
 }

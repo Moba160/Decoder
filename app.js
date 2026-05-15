@@ -4,6 +4,15 @@ let manufacturers = [];
 let detailedManufacturers = [];
 let currentFile = "";
 let currentResetCommand = "8=8";
+let totalDecoderCount = 0;
+let herstellerKennung = {};
+
+function updateDecoderCount(count) {
+    const el = document.getElementById('decoder-count');
+    if (el) {
+        el.textContent = `(${count})`;
+    }
+}
 
 // DOM Elements
 let fileSelectionScreen, programmingScreen, backBtn, resetBtn, cvGroupsContainer, decoderNameEl, firmwareInfoEl, groupNav;
@@ -66,10 +75,33 @@ async function init() {
         resultsTableContainer.style.display = 'none';
     });
 
+    document.getElementById('preset-spur-n').addEventListener('click', () => {
+        filterLength.value = '25';
+        filterWidth.value = '15';
+        filterHeight.value = '3';
+        const results = applyFilters();
+        renderResultsTable(results);
+    });
+
     backBtn.addEventListener('click', showFileSelection);
     resetBtn.addEventListener('click', handleReset);
     resetCancelBtn.addEventListener('click', () => resetModal.style.display = 'none');
     resetConfirmBtn.addEventListener('click', performReset);
+
+    // Theme toggle
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const applyTheme = (isLight) => {
+        document.body.classList.toggle('light-mode', isLight);
+        document.getElementById('icon-moon').style.display = isLight ? 'none' : '';
+        document.getElementById('icon-sun').style.display = isLight ? '' : 'none';
+    };
+    const savedTheme = localStorage.getItem('theme');
+    applyTheme(savedTheme === 'light');
+    themeToggleBtn.addEventListener('click', () => {
+        const isLight = !document.body.classList.contains('light-mode');
+        applyTheme(isLight);
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
 
     window.addEventListener('resize', () => {
         document.querySelectorAll('.speed-curve-canvas').forEach(c => drawSpeedCurve(c));
@@ -79,12 +111,14 @@ async function init() {
 function applyFilters() {
     const fType = document.getElementById('filter-type').value;
     const fProd = document.getElementById('filter-production').value;
-    const fCurrent = parseFloat(document.getElementById('filter-current').value) || 0;
-    const fVoltage = parseFloat(document.getElementById('filter-voltage').value) || 0;
+    const parseVal = (val) => parseFloat(String(val).replace(',', '.')) || 0;
+    
+    const fCurrent = parseVal(document.getElementById('filter-current').value);
+    const fVoltage = parseVal(document.getElementById('filter-voltage').value);
     const fFa = parseInt(document.getElementById('filter-fa').value) || 0;
-    const fLength = parseFloat(document.getElementById('filter-length').value) || Infinity;
-    const fWidth = parseFloat(document.getElementById('filter-width').value) || Infinity;
-    const fHeight = parseFloat(document.getElementById('filter-height').value) || Infinity;
+    const fLength = parseVal(document.getElementById('filter-length').value) || Infinity;
+    const fWidth = parseVal(document.getElementById('filter-width').value) || Infinity;
+    const fHeight = parseVal(document.getElementById('filter-height').value) || Infinity;
 
     const isFiltering = fType || fProd || fCurrent || fVoltage || fFa || fLength !== Infinity || fWidth !== Infinity || fHeight !== Infinity;
 
@@ -96,12 +130,12 @@ function applyFilters() {
         m.decoder.forEach(d => {
             const matchType = !fType || d.type === fType;
             const matchProd = !fProd || String(d.in_production) === fProd;
-            const matchCurrent = (d.max_current || 0) >= fCurrent;
+            const matchCurrent = ((d.max_current || 0) * 1000) >= fCurrent;
             const matchVoltage = (d.max_voltage || 0) >= fVoltage;
             const matchFa = (d.fa_count || 0) >= fFa;
-            const matchLength = (d.length || Infinity) <= fLength;
-            const matchWidth = (d.width || Infinity) <= fWidth;
-            const matchHeight = (d.height || Infinity) <= fHeight;
+            const matchLength = (d.length || 0) <= fLength;
+            const matchWidth = (d.width || 0) <= fWidth;
+            const matchHeight = (d.height || 0) <= fHeight;
 
             if (matchType && matchProd && matchCurrent && matchVoltage && matchFa && matchLength && matchWidth && matchHeight) {
                 results.push({ manufacturer: m, decoder: d });
@@ -119,12 +153,15 @@ function renderResultsTable(results) {
     if (results.length === 0 && !isFilteringActive()) {
         container.style.display = 'none';
         manualContainer.style.display = 'grid';
+        updateDecoderCount(totalDecoderCount);
         return;
     }
 
     container.style.display = 'block';
     manualContainer.style.display = 'none';
     tbody.innerHTML = '';
+    
+    updateDecoderCount(results.length);
 
     results.forEach(item => {
         const tr = document.createElement('tr');
@@ -133,7 +170,7 @@ function renderResultsTable(results) {
             <td>${item.decoder.name}</td>
             <td>${item.decoder.type || '-'}</td>
             <td class="${item.decoder.in_production ? 'in-prod' : 'out-prod'}">${item.decoder.in_production ? '✔' : '✘'}</td>
-            <td>${item.decoder.max_current || 0}A</td>
+            <td>${(item.decoder.max_current || 0) * 1000}mA</td>
             <td>${item.decoder.max_voltage || 0}V</td>
             <td>${item.decoder.fa_count || 0}</td>
             <td>${item.decoder.length || 0}</td>
@@ -154,15 +191,80 @@ function isFilteringActive() {
         .some(id => document.getElementById(id).value !== '');
 }
 
+function updateFilterTooltips() {
+    const allDecoders = detailedManufacturers.flatMap(m => m.decoder || []);
+    
+    const stat = (vals) => {
+        const filtered = vals.filter(v => v > 0);
+        if (!filtered.length) return null;
+        return { min: Math.min(...filtered), max: Math.max(...filtered) };
+    };
+
+    const fields = [
+        {
+            id: 'filter-current',
+            vals: allDecoders.map(d => (d.max_current || 0) * 1000),
+            unit: 'mA', label: 'Strom'
+        },
+        {
+            id: 'filter-voltage',
+            vals: allDecoders.map(d => d.max_voltage || 0),
+            unit: 'V', label: 'Spannung'
+        },
+        {
+            id: 'filter-fa',
+            vals: allDecoders.map(d => d.fa_count || 0),
+            unit: '', label: 'Funktionen'
+        },
+        {
+            id: 'filter-length',
+            vals: allDecoders.map(d => d.length || 0),
+            unit: 'mm', label: 'Länge'
+        },
+        {
+            id: 'filter-width',
+            vals: allDecoders.map(d => d.width || 0),
+            unit: 'mm', label: 'Breite'
+        },
+        {
+            id: 'filter-height',
+            vals: allDecoders.map(d => d.height || 0),
+            unit: 'mm', label: 'Höhe'
+        }
+    ];
+
+    fields.forEach(({ id, vals, unit, label }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const s = stat(vals);
+        if (s) {
+            const minStr = Number.isInteger(s.min) ? s.min : s.min.toFixed(1);
+            const maxStr = Number.isInteger(s.max) ? s.max : s.max.toFixed(1);
+            el.title = `${label}: von ${minStr}${unit} bis ${maxStr}${unit}`;
+        }
+    });
+}
+
 async function loadData() {
     try {
-        const dResp = await fetch('decoder/hersteller_detailed.json');
+        const dResp = await fetch('decoder/decoderdaten.json');
         if (dResp.ok) {
             detailedManufacturers = await dResp.json();
             manufacturers = detailedManufacturers.map(m => ({ id: m.id, name: m.name }));
+            totalDecoderCount = detailedManufacturers.reduce((sum, m) => sum + (m.decoder ? m.decoder.length : 0), 0);
+            updateDecoderCount(totalDecoderCount);
+            updateFilterTooltips();
         }
     } catch (e) {
         console.warn("Stammdaten konnten nicht geladen werden:", e);
+    }
+    try {
+        const kResp = await fetch('decoder/hersteller.json');
+        if (kResp.ok) {
+            herstellerKennung = await kResp.json();
+        }
+    } catch (e) {
+        console.warn("Hersteller-Kennung konnte nicht geladen werden:", e);
     }
 }
 
@@ -331,13 +433,19 @@ function parseAndRenderDecoder(xmlDoc) {
     decoderNameEl.textContent = decoders ? Array.from(decoders).map(d => d.getAttribute('name')).join(', ') : "Unbekannter Decoder";
     
     const mId = firmware?.getAttribute('manufacturerId');
-    const m = manufacturers.find(item => item.id == mId);
-    const mName = m ? `${m.name} (ID: ${mId})` : mId;
+    const kennung = herstellerKennung[mId];
+    const mName = kennung ? `${kennung.name} (${mId})` : `Hersteller ${mId}`;
     
     const resetNode = xmlDoc.getElementsByTagName('reset')[0];
-    currentResetCommand = resetNode ? `${resetNode.getAttribute('cv')}=${resetNode.getAttribute('value')}` : "8=8";
+    if (resetNode) {
+        currentResetCommand = `${resetNode.getAttribute('cv')}=${resetNode.getAttribute('value')}`;
+    } else if (kennung && kennung.reset) {
+        currentResetCommand = kennung.reset;
+    } else {
+        currentResetCommand = "8=8";
+    }
     
-    firmwareInfoEl.textContent = `Firmware Version: ${firmware?.getAttribute('version') || '?'} | Hersteller: ${mName}`;
+    firmwareInfoEl.textContent = `${mName} | Firmwareversion: ${firmware?.getAttribute('version') || '?'}`;
     cvGroupsContainer.innerHTML = '';
     groupNav.innerHTML = '<h4>Gruppen</h4>';
 
