@@ -1,0 +1,1771 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- © by DecoderDB. Licence see https://www.decoderdb.de/licence/ -->
+<decoderFirmwareDefinition xmlns="http://www.decoderdb.de/schema/decoderFirmware/1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ct="http://www.decoderdb.de/schema/commonTypes/1.2">
+  <version createdBy="DecoderDB" creatorLink="https://www.decoderdb.de" author="Stephan Bauer" lastUpdate="2025-02-21T16:09:22" created="2016-12-30"/>
+  <firmware version="88" releaseDate="2011-12-30" manufacturerId="117" decoderDBLink="https://www.decoderdb.de/?decoderFirmwarePage=19">
+    <decoders>
+      <decoder name="DCX51" type="loco"/>
+      <decoder name="DCX52" type="loco"/>
+      <decoder name="DCX70" type="loco"/>
+      <decoder name="DCX70-2" type="loco"/>
+      <decoder name="DCX74" type="loco"/>
+      <decoder name="DCX74z" type="loco"/>
+      <decoder name="DCX75" type="loco"/>
+      <decoder name="DCX76" type="loco"/>
+      <decoder name="DCX76z" type="loco"/>
+      <decoder name="DCX77L" type="loco"/>
+      <decoder name="DCX77z" type="loco"/>
+    </decoders>
+    <protocols>
+      <protocol type="dcc" speedSteps="14;28;128" progModes="DirectByte;POM" options="RestrictedSpeedStepInstruction(MAN)">
+        <resets>
+          <reset cv="1" value="0">
+            <ct:description language="all" text="Reset"/>
+          </reset>
+        </resets>
+        <cvs>
+          <ct:cv id="1" number="1" type="byte" possibleValues="1-127" defaultValue="3" pomWriteExclude="true" mode="rw">
+            <ct:description language="de" text="Adresse kurz"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="29" selection="bit:5" value="1"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="797" number="2" type="byte" possibleValues="0-255" defaultValue="2" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Mindestgeschwindigkeit"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="29" selection="bit:4" value="1"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="798" number="3" type="byte" possibleValues="0-255" defaultValue="4" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+              <ct:specialValue value="0">
+                <ct:description language="de" text="aus"/>
+                <ct:description language="en" text="off"/>
+              </ct:specialValue>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Beschleunigungszeit"/>
+          </ct:cv>
+          <ct:cv id="799" number="4" type="byte" possibleValues="0-255" defaultValue="4" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+              <ct:specialValue value="0">
+                <ct:description language="de" text="aus"/>
+                <ct:description language="en" text="off"/>
+              </ct:specialValue>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Bremszeit"/>
+          </ct:cv>
+          <ct:cv id="800" number="5" type="byte" possibleValues="0-255" defaultValue="255" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+              <ct:specialValue value="0">
+                <ct:description language="de" text="255"/>
+              </ct:specialValue>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Maximalgeschwindigkeit"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="29" selection="bit:4" value="1"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="801" number="6" type="byte" possibleValues="0-255" defaultValue="0" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+              <ct:specialValue value="0">
+                <ct:description language="de" text="deaktiviert"/>
+                <ct:description language="en" text="disabled"/>
+              </ct:specialValue>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Mittengeschwindigkeit"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="29" selection="bit:4" value="1"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="25" number="7" type="byte" possibleValues="0-255" defaultValue="88" mode="ro">
+            <ct:description language="de" text="Softwareversion"/>
+          </ct:cv>
+          <ct:cv id="26" number="8" type="byte" possibleValues="0-255" defaultValue="117" mode="ro">
+            <ct:description language="de" text="Herstellerkennung"/>
+          </ct:cv>
+          <ct:cv id="802" number="9" type="select" possibleValues="6-63;134-191" defaultValue="134" mode="rw">
+            <ct:description language="de" text="Motoransteuerungsperiode"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant" target="partial:2112">
+                <ct:condition type="relational" operation="equal" cv="9" selection="bit:7" value="1"/>
+              </ct:trigger>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="137" selection="bit:7" value="1"/>
+              </ct:trigger>
+            </ct:conditions>
+            <ct:partial number="2112" possibleValues="6-63">
+              <ct:valueCalculation unit="Hz" digits="1">
+                <ct:item type="constant" value="1953"/>
+                <ct:item type="operator" value="/"/>
+                <ct:item type="self"/>
+              </ct:valueCalculation>
+              <ct:description language="de" text="Motoransteuerungsfrequenz"/>
+            </ct:partial>
+            <ct:bit number="7" value="128">
+              <ct:description language="de" text="16 kHz"/>
+            </ct:bit>
+          </ct:cv>
+          <ct:cv id="30" number="13" type="select" possibleValues="0-255" defaultValue="1" mode="rw">
+            <ct:description language="de" text="F1 - F8 im Analogbetrieb"/>
+            <ct:bit number="0" value="1">
+              <ct:description language="all" text="F1"/>
+            </ct:bit>
+            <ct:bit number="1" value="2">
+              <ct:description language="all" text="F2"/>
+            </ct:bit>
+            <ct:bit number="2" value="4">
+              <ct:description language="all" text="F3"/>
+            </ct:bit>
+            <ct:bit number="3" value="8">
+              <ct:description language="all" text="F4"/>
+            </ct:bit>
+            <ct:bit number="4" value="16">
+              <ct:description language="all" text="F5"/>
+            </ct:bit>
+            <ct:bit number="5" value="32">
+              <ct:description language="all" text="F6"/>
+            </ct:bit>
+            <ct:bit number="6" value="64">
+              <ct:description language="all" text="F7"/>
+            </ct:bit>
+            <ct:bit number="7" value="128">
+              <ct:description language="all" text="F8"/>
+            </ct:bit>
+          </ct:cv>
+          <ct:cvGroup id="10" type="dccLongAddr" possibleValues="0-10239" defaultValue="0" pomWriteExclude="true" mode="rw">
+            <ct:description language="de" text="Adresse lang"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="29" selection="bit:5" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+            <ct:cv number="18" type="byte" possibleValues="0-255" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Niederwertiges Byte"/>
+            </ct:cv>
+            <ct:cv number="17" type="byte" possibleValues="192-231" defaultValue="192" mode="rw">
+              <ct:description language="de" text="Höherwertiges Byte"/>
+            </ct:cv>
+          </ct:cvGroup>
+          <ct:cv id="35" number="19" type="byte" possibleValues="0-127" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Verbundadresse" help="0 = Inaktiv"/>
+          </ct:cv>
+          <ct:cv id="803" number="29" type="select" possibleValues="0-7;16-23;32-39;48-55" defaultValue="2" mode="rw">
+            <ct:description language="de" text="Konfiguration"/>
+            <ct:bit number="0" value="1">
+              <ct:description language="de" text="Richtung umkehren"/>
+            </ct:bit>
+            <ct:bitSelection number="1" value="2">
+              <ct:option value="0">
+                <ct:description language="de" text="14 Fahrstufen"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="de" text="28 / 128 Fahrstufen"/>
+              </ct:option>
+            </ct:bitSelection>
+            <ct:bit number="2" value="4">
+              <ct:description language="de" text="Analogbetrieb eingeschaltet"/>
+            </ct:bit>
+            <ct:bitSelection number="4" value="16">
+              <ct:option value="0">
+                <ct:description language="de" text="Geschwindigkeit gemäß CV2, 5 u. 6"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="de" text="Individuelle Kurve gemäß CV67-94"/>
+              </ct:option>
+            </ct:bitSelection>
+            <ct:bitSelection number="5" value="32">
+              <ct:option value="0">
+                <ct:description language="de" text="Kurze Adresse (CV1)"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="de" text="Lange Adresse (CV17/18)"/>
+              </ct:option>
+            </ct:bitSelection>
+          </ct:cv>
+          <ct:cv id="804" number="30" type="select" possibleValues="0-3" defaultValue="0" mode="ro">
+            <ct:description language="de" text="Fehleranalyse"/>
+            <ct:group number="0">
+              <ct:option value="0">
+                <ct:description language="de" text="Kein Fehler"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="de" text="Motor"/>
+              </ct:option>
+              <ct:option value="2">
+                <ct:description language="de" text="Licht"/>
+              </ct:option>
+              <ct:option value="3">
+                <ct:description language="de" text="Licht und Motor"/>
+              </ct:option>
+            </ct:group>
+          </ct:cv>
+          <ct:cvGroup id="2661" type="matrix">
+            <ct:description language="de" text="Funktionszuordnung"/>
+            <ct:cv id="806" number="33" type="select" possibleValues="0-255" defaultValue="1" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F0f"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="F0f Licht vorwärts"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="F0r Licht rückwärts"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="all" text="AUX1"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="all" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="all" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="all" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="all" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="all" text="AUX6"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="826" number="34" type="select" possibleValues="0-255" defaultValue="2" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F0r"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="F0f Licht vorwärts"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="F0r Licht rückwärts"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="all" text="AUX1"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="all" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="all" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="all" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="all" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="all" text="AUX6"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="827R0" number="35" type="select" possibleValues="0-255" defaultValue="4" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F1"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="F0f Licht vorwärts"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="F0r Licht rückwärts"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="all" text="AUX1"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="all" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="all" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="all" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="all" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="all" text="AUX6"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="827R1" number="36" type="select" possibleValues="0-255" defaultValue="8" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F2"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="F0f Licht vorwärts"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="F0r Licht rückwärts"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="all" text="AUX1"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="all" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="all" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="all" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="all" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="all" text="AUX6"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="827R2" number="37" type="select" possibleValues="0-255" defaultValue="16" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F3"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="F0f Licht vorwärts"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="F0r Licht rückwärts"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="all" text="AUX1"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="all" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="all" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="all" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="all" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="all" text="AUX6"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="828R0" number="38" type="select" possibleValues="0-255" defaultValue="4" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F4"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="828R1" number="39" type="select" possibleValues="0-255" defaultValue="8" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F5"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="828R2" number="40" type="select" possibleValues="0-255" defaultValue="16" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F6"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="828R3" number="41" type="select" possibleValues="0-255" defaultValue="32" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F7"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="828R4" number="42" type="select" possibleValues="0-255" defaultValue="64" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F8"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX2"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX3"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX4"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="829R0" number="43" type="select" possibleValues="0-255" defaultValue="16" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F9"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX10"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX11"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX12"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="829R1" number="44" type="select" possibleValues="0-255" defaultValue="32" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F10"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX10"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX11"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX12"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="829R2" number="45" type="select" possibleValues="0-255" defaultValue="64" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F11"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX10"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX11"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX12"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="829R3" number="46" type="select" possibleValues="0-255" defaultValue="128" mode="rw">
+              <ct:description language="de" text="Funktionszuordnung F12"/>
+              <ct:bit number="0" value="1">
+                <ct:description language="de" text="AUX5"/>
+              </ct:bit>
+              <ct:bit number="1" value="2">
+                <ct:description language="de" text="AUX6"/>
+              </ct:bit>
+              <ct:bit number="2" value="4">
+                <ct:description language="de" text="AUX7"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="de" text="AUX8"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="de" text="AUX9"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="de" text="AUX10"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="de" text="AUX11"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="de" text="AUX12"/>
+              </ct:bit>
+            </ct:cv>
+          </ct:cvGroup>
+          <ct:cv id="807" number="50" type="byte" possibleValues="0-255" defaultValue="255" mode="rw">
+            <ct:valueCalculation unit="%" digits="1">
+              <ct:item type="self"/>
+              <ct:item type="operator" value="*"/>
+              <ct:item type="constant" value="100"/>
+              <ct:item type="operator" value="/"/>
+              <ct:item type="constant" value="255"/>
+              <ct:specialValue value="0">
+                <ct:description language="de" text="aus"/>
+                <ct:description language="en" text="off"/>
+              </ct:specialValue>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Regeleinfluss"/>
+          </ct:cv>
+          <ct:cv id="808" number="51" type="byte" possibleValues="0-255" defaultValue="80" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="P-Regler"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="50" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="809" number="52" type="byte" possibleValues="0-255" defaultValue="40" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="I-Regler"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="50" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="810" number="53" type="select" possibleValues="0-2;66;77" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Spezial CV"/>
+            <ct:group number="0">
+              <ct:option value="0">
+                <ct:description language="de" text="Programmierhilfe Lokmaus (+0)"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="de" text="Programmierhilfe Lokmaus (+100)"/>
+              </ct:option>
+              <ct:option value="2">
+                <ct:description language="de" text="Programmierhilfe Lokmaus (+200)"/>
+              </ct:option>
+              <ct:option value="66">
+                <ct:description language="de" text="Programmierung und Rückmeldung sperren"/>
+              </ct:option>
+              <ct:option value="77">
+                <ct:description language="de" text="Programmierung und Rückmeldung freigeben"/>
+              </ct:option>
+            </ct:group>
+          </ct:cv>
+          <ct:cv id="811" number="54" type="byte" possibleValues="0-100" defaultValue="50" mode="rw">
+            <ct:valueCalculation unit="%">
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Helligkeit der Funktionsausgänge"/>
+          </ct:cv>
+          <ct:cv id="812" number="55" type="byte" possibleValues="0-100" defaultValue="50" mode="rw">
+            <ct:valueCalculation unit="%">
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Spannungsreduktion Kupplungsausgänge"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="151" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="813" number="56" type="byte" possibleValues="0-255" defaultValue="60" mode="rw">
+            <ct:valueCalculation unit="sec" digits="1">
+              <ct:item type="self"/>
+              <ct:item type="operator" value="/"/>
+              <ct:item type="constant" value="10"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Schaltzeit der Kupplungsausgänge"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="151" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="814" number="59" type="byte" possibleValues="0-255" defaultValue="168" mode="rw">
+            <ct:description language="de" text="Zugsbeeinflussung „L“"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="137" selection="bit:4" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="815" number="60" type="byte" possibleValues="0-255" defaultValue="84" mode="rw">
+            <ct:description language="de" text="Zugsbeeinflussung „U“"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="137" selection="bit:4" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="816" number="61" type="byte" possibleValues="0-255" defaultValue="1" mode="rw">
+            <ct:valueCalculation unit="sec">
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Anfahrverzögerungszeit HLU"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="137" selection="bit:4" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="817" number="64" type="byte" possibleValues="0-255" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Regelungsreferenz"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="50" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cvGroup id="805" type="dccSpeedCurve">
+            <ct:description language="de" text="Geschwindigkeitskurve"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="29" selection="bit:4" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+            <ct:cv number="67" type="byte" possibleValues="0-255" defaultValue="9" mode="rw">
+              <ct:description language="de" text="Fahrstufe 1"/>
+            </ct:cv>
+            <ct:cv number="68" type="byte" possibleValues="0-255" defaultValue="18" mode="rw">
+              <ct:description language="de" text="Fahrstufe 2"/>
+            </ct:cv>
+            <ct:cv number="69" type="byte" possibleValues="0-255" defaultValue="27" mode="rw">
+              <ct:description language="de" text="Fahrstufe 3"/>
+            </ct:cv>
+            <ct:cv number="70" type="byte" possibleValues="0-255" defaultValue="36" mode="rw">
+              <ct:description language="de" text="Fahrstufe 4"/>
+            </ct:cv>
+            <ct:cv number="71" type="byte" possibleValues="0-255" defaultValue="45" mode="rw">
+              <ct:description language="de" text="Fahrstufe 5"/>
+            </ct:cv>
+            <ct:cv number="72" type="byte" possibleValues="0-255" defaultValue="54" mode="rw">
+              <ct:description language="de" text="Fahrstufe 6"/>
+            </ct:cv>
+            <ct:cv number="73" type="byte" possibleValues="0-255" defaultValue="63" mode="rw">
+              <ct:description language="de" text="Fahrstufe 7"/>
+            </ct:cv>
+            <ct:cv number="74" type="byte" possibleValues="0-255" defaultValue="72" mode="rw">
+              <ct:description language="de" text="Fahrstufe 8"/>
+            </ct:cv>
+            <ct:cv number="75" type="byte" possibleValues="0-255" defaultValue="81" mode="rw">
+              <ct:description language="de" text="Fahrstufe 9"/>
+            </ct:cv>
+            <ct:cv number="76" type="byte" possibleValues="0-255" defaultValue="90" mode="rw">
+              <ct:description language="de" text="Fahrstufe 10"/>
+            </ct:cv>
+            <ct:cv number="77" type="byte" possibleValues="0-255" defaultValue="99" mode="rw">
+              <ct:description language="de" text="Fahrstufe 11"/>
+            </ct:cv>
+            <ct:cv number="78" type="byte" possibleValues="0-255" defaultValue="108" mode="rw">
+              <ct:description language="de" text="Fahrstufe 12"/>
+            </ct:cv>
+            <ct:cv number="79" type="byte" possibleValues="0-255" defaultValue="117" mode="rw">
+              <ct:description language="de" text="Fahrstufe 13"/>
+            </ct:cv>
+            <ct:cv number="80" type="byte" possibleValues="0-255" defaultValue="126" mode="rw">
+              <ct:description language="de" text="Fahrstufe 14"/>
+            </ct:cv>
+            <ct:cv number="81" type="byte" possibleValues="0-255" defaultValue="135" mode="rw">
+              <ct:description language="de" text="Fahrstufe 15"/>
+            </ct:cv>
+            <ct:cv number="82" type="byte" possibleValues="0-255" defaultValue="144" mode="rw">
+              <ct:description language="de" text="Fahrstufe 16"/>
+            </ct:cv>
+            <ct:cv number="83" type="byte" possibleValues="0-255" defaultValue="153" mode="rw">
+              <ct:description language="de" text="Fahrstufe 17"/>
+            </ct:cv>
+            <ct:cv number="84" type="byte" possibleValues="0-255" defaultValue="162" mode="rw">
+              <ct:description language="de" text="Fahrstufe 18"/>
+            </ct:cv>
+            <ct:cv number="85" type="byte" possibleValues="0-255" defaultValue="171" mode="rw">
+              <ct:description language="de" text="Fahrstufe 19"/>
+            </ct:cv>
+            <ct:cv number="86" type="byte" possibleValues="0-255" defaultValue="180" mode="rw">
+              <ct:description language="de" text="Fahrstufe 20"/>
+            </ct:cv>
+            <ct:cv number="87" type="byte" possibleValues="0-255" defaultValue="189" mode="rw">
+              <ct:description language="de" text="Fahrstufe 21"/>
+            </ct:cv>
+            <ct:cv number="88" type="byte" possibleValues="0-255" defaultValue="198" mode="rw">
+              <ct:description language="de" text="Fahrstufe 22"/>
+            </ct:cv>
+            <ct:cv number="89" type="byte" possibleValues="0-255" defaultValue="207" mode="rw">
+              <ct:description language="de" text="Fahrstufe 23"/>
+            </ct:cv>
+            <ct:cv number="90" type="byte" possibleValues="0-255" defaultValue="216" mode="rw">
+              <ct:description language="de" text="Fahrstufe 24"/>
+            </ct:cv>
+            <ct:cv number="91" type="byte" possibleValues="0-255" defaultValue="225" mode="rw">
+              <ct:description language="de" text="Fahrstufe 25"/>
+            </ct:cv>
+            <ct:cv number="92" type="byte" possibleValues="0-255" defaultValue="234" mode="rw">
+              <ct:description language="de" text="Fahrstufe 26"/>
+            </ct:cv>
+            <ct:cv number="93" type="byte" possibleValues="0-255" defaultValue="243" mode="rw">
+              <ct:description language="de" text="Fahrstufe 27"/>
+            </ct:cv>
+            <ct:cv number="94" type="byte" possibleValues="0-255" defaultValue="252" mode="rw">
+              <ct:description language="de" text="Fahrstufe 28"/>
+            </ct:cv>
+          </ct:cvGroup>
+          <ct:cv id="818" number="96" type="byte" possibleValues="0-255" defaultValue="212" mode="rw">
+            <ct:description language="de" text="Zugbeeinflussung „F-L“"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="137" selection="bit:4" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="819" number="97" type="byte" possibleValues="0-255" defaultValue="126" mode="rw">
+            <ct:description language="de" text="Zugbeeinflussung „L-U“"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="137" selection="bit:4" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="820" number="98" type="byte" possibleValues="0-255" defaultValue="42" mode="rw">
+            <ct:description language="de" text="Zugbeeinflussung „U-Stopp“"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="137" selection="bit:4" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="14R0" number="105" type="byte" possibleValues="0-255" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Benutzerdaten 1"/>
+          </ct:cv>
+          <ct:cv id="14R1" number="106" type="byte" possibleValues="0-255" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Benutzerdaten 2"/>
+          </ct:cv>
+          <ct:cv id="832" number="109" type="select" possibleValues="0;1" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Auswahl der CVs Gruppen"/>
+            <ct:group number="0">
+              <ct:option value="0">
+                <ct:description language="de" text="Standardgruppe"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="de" text="Spezialgruppe für eigene Anwendungen"/>
+              </ct:option>
+            </ct:group>
+          </ct:cv>
+          <ct:cv id="821" number="111" type="byte" possibleValues="0-255" defaultValue="255" mode="rw">
+            <ct:valueCalculation unit="%" digits="1">
+              <ct:item type="self"/>
+              <ct:item type="operator" value="*"/>
+              <ct:item type="constant" value="100"/>
+              <ct:item type="operator" value="/"/>
+              <ct:item type="constant" value="255"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Intensität der Quittierungsimpulse (ACK)" help="verbessert die Programmierbarkeit"/>
+          </ct:cv>
+          <ct:cv id="822" number="114" type="byte" possibleValues="0-100" defaultValue="0" mode="rw">
+            <ct:valueCalculation unit="%">
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Helligkeit der Effekte"/>
+          </ct:cv>
+          <ct:cv id="823" number="115" type="byte" possibleValues="0-255" defaultValue="0" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Pausendauer der Effekte" help="definiert die Zeit (Dauer) zwischen 2 Effekten"/>
+          </ct:cv>
+          <ct:cv id="833" number="116" type="select" possibleValues="0-31;64-95" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Rangiergang - ABC"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant" target="bit:4">
+                <ct:condition type="relational" operation="equal" cv="116" selection="bit:3" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+            <ct:bit number="0" value="1">
+              <ct:description language="de" text="Anfahr- und Bremsverzögerung (CV3, CV4) ausschalten"/>
+            </ct:bit>
+            <ct:bit number="1" value="2">
+              <ct:description language="de" text="maximale Geschwindigkeit wird halbiert"/>
+            </ct:bit>
+            <ct:bit number="2" value="4">
+              <ct:description language="de" text="rückwärts nur 65% der maximalen Geschwindigkeit"/>
+            </ct:bit>
+            <ct:bit number="3" value="8">
+              <ct:description language="de" text="Bremsen mit Diode aktiv"/>
+            </ct:bit>
+            <ct:bit number="4" value="16">
+              <ct:description language="de" text="Bremsen mit Diode NICHT Richtungsabhängig"/>
+            </ct:bit>
+            <ct:bit number="6" value="64">
+              <ct:description language="de" text="Zugbeeinflussung wirkt nicht bei Rangierfunktion (MAN)"/>
+            </ct:bit>
+          </ct:cv>
+          <ct:cv id="834" number="117" type="select" possibleValues="0-12" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Abblenden"/>
+            <ct:group number="0">
+              <ct:option value="0">
+                <ct:description language="de" text="deaktiviert"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="all" text="F1"/>
+              </ct:option>
+              <ct:option value="2">
+                <ct:description language="all" text="F2"/>
+              </ct:option>
+              <ct:option value="3">
+                <ct:description language="all" text="F3"/>
+              </ct:option>
+              <ct:option value="4">
+                <ct:description language="all" text="F4"/>
+              </ct:option>
+              <ct:option value="5">
+                <ct:description language="all" text="F5"/>
+              </ct:option>
+              <ct:option value="6">
+                <ct:description language="all" text="F6"/>
+              </ct:option>
+              <ct:option value="7">
+                <ct:description language="all" text="F7"/>
+              </ct:option>
+              <ct:option value="8">
+                <ct:description language="all" text="F8"/>
+              </ct:option>
+              <ct:option value="9">
+                <ct:description language="all" text="F9"/>
+              </ct:option>
+              <ct:option value="10">
+                <ct:description language="all" text="F10"/>
+              </ct:option>
+              <ct:option value="11">
+                <ct:description language="all" text="F11"/>
+              </ct:option>
+              <ct:option value="12">
+                <ct:description language="all" text="F12"/>
+              </ct:option>
+            </ct:group>
+          </ct:cv>
+          <ct:cv id="835" number="118" type="select" possibleValues="0-255" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Maske für Abblendfunktion"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="117" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+            <ct:bit number="0" value="1">
+              <ct:description language="de" text="Licht vorwärts"/>
+            </ct:bit>
+            <ct:bit number="1" value="2">
+              <ct:description language="de" text="Licht rückwärts"/>
+            </ct:bit>
+            <ct:bit number="2" value="4">
+              <ct:description language="all" text="AUX1"/>
+            </ct:bit>
+            <ct:bit number="3" value="8">
+              <ct:description language="all" text="AUX2"/>
+            </ct:bit>
+            <ct:bit number="4" value="16">
+              <ct:description language="all" text="AUX3"/>
+            </ct:bit>
+            <ct:bit number="5" value="32">
+              <ct:description language="all" text="AUX4"/>
+            </ct:bit>
+            <ct:bit number="6" value="64">
+              <ct:description language="all" text="AUX5"/>
+            </ct:bit>
+            <ct:bit number="7" value="128">
+              <ct:description language="all" text="AUX6"/>
+            </ct:bit>
+          </ct:cv>
+          <ct:cv id="824" number="119" type="byte" possibleValues="0-100" defaultValue="30" mode="rw">
+            <ct:valueCalculation unit="%">
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Dimmwert für Abblendfunktion"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="117" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="825" number="120" type="byte" possibleValues="0-255" defaultValue="0" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Zyklusdauer der Effekte"/>
+          </ct:cv>
+          <ct:cv id="836" number="137" type="select" possibleValues="0-3;16-19;64-67;80-83;128-131;144-147;192-195;208-211" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Spezial CV"/>
+            <ct:bitSelection number="0" value="1">
+              <ct:option value="0">
+                <ct:description language="de" text="Zimo MAN-Bit 8 Funktionen"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="de" text="Zimo MAN-Bit 14 Funktionen"/>
+              </ct:option>
+            </ct:bitSelection>
+            <ct:bit number="1" value="2">
+              <ct:description language="de" text="Zimo Zugnummernerkennung"/>
+            </ct:bit>
+            <ct:bit number="4" value="16">
+              <ct:description language="de" text="Zimo signalabhängige Zugbeeinflussung (HLU)"/>
+            </ct:bit>
+            <ct:bit number="6" value="64">
+              <ct:description language="de" text="LGB Impulse über F4 auswerten"/>
+            </ct:bit>
+            <ct:bitSelection number="7" value="128">
+              <ct:option value="0">
+                <ct:description language="de" text="Motoransteuerungsfrequenz aus CV9"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="de" text="Motoransteuerungsfrequenz 32KHz"/>
+              </ct:option>
+            </ct:bitSelection>
+          </ct:cv>
+          <ct:cv id="837" number="138" type="byte" possibleValues="0-255" defaultValue="3" mode="rw">
+            <ct:valueCalculation>
+              <ct:item type="self"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Bremszeit (HLU)"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="137" selection="bit:4" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="838" number="139" type="byte" possibleValues="0-255" defaultValue="15" mode="rw">
+            <ct:description language="de" text="Kurzschluss-Schwelle 1 Zusatzfunktionen" help="sofortige Abschaltung bei Überlastung"/>
+          </ct:cv>
+          <ct:cv id="839" number="140" type="byte" possibleValues="0-255" defaultValue="12" mode="rw">
+            <ct:description language="de" text="Kurzschluss-Schwelle 2 Zusatzfunktionen" help="rasche Abschaltung bei Überlastung"/>
+          </ct:cv>
+          <ct:cv id="840" number="141" type="byte" possibleValues="0-255" defaultValue="10" mode="rw">
+            <ct:description language="de" text="Kurzschluss-Schwelle 3 Zusatzfunktionen" help="langsame Abschaltung bei Überlastung"/>
+          </ct:cv>
+          <ct:cv id="841" number="142" type="byte" possibleValues="0-255" defaultValue="90" mode="rw">
+            <ct:description language="de" text="Kurzschluss-Schwelle 1 Motors" help="sofortige Abschaltung bei Überlastung"/>
+          </ct:cv>
+          <ct:cv id="842" number="143" type="byte" possibleValues="0-255" defaultValue="80" mode="rw">
+            <ct:description language="de" text="Kurzschluss-Schwelle 2 Motors" help="rasche Abschaltung bei Überlastung"/>
+          </ct:cv>
+          <ct:cv id="843" number="144" type="byte" possibleValues="0-255" defaultValue="70" mode="rw">
+            <ct:description language="de" text="Kurzschluss-Schwelle 3 Motors" help="langsame Abschaltung bei Überlastung"/>
+          </ct:cv>
+          <ct:cv id="844" number="147" type="byte" possibleValues="0-126" defaultValue="20" mode="rw">
+            <ct:description language="de" text="Entlastung der Kupplung" help="Tempo beim Zurückdrücken (Lok fährt in die umgekehrte Richtung)"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="151" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="845" number="148" type="byte" possibleValues="0-126" defaultValue="50" mode="rw">
+            <ct:description language="de" text="Wegfahren von Waggons"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="151" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="846" number="149" type="byte" possibleValues="0-255" defaultValue="10" mode="rw">
+            <ct:valueCalculation unit="sec" digits="1">
+              <ct:item type="self"/>
+              <ct:item type="operator" value="/"/>
+              <ct:item type="constant" value="10"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Entlastungszeit"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="151" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="847" number="150" type="byte" possibleValues="0-255" defaultValue="30" mode="rw">
+            <ct:valueCalculation unit="sec" digits="1">
+              <ct:item type="self"/>
+              <ct:item type="operator" value="/"/>
+              <ct:item type="constant" value="10"/>
+            </ct:valueCalculation>
+            <ct:description language="de" text="Wegfahrzeit"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="151" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+          </ct:cv>
+          <ct:cv id="848" number="151" type="select" possibleValues="0-12" defaultValue="0" mode="rw">
+            <ct:description language="de" text="Abkuppel-Automatik"/>
+            <ct:group number="0">
+              <ct:option value="0">
+                <ct:description language="de" text="deaktiviert"/>
+              </ct:option>
+              <ct:option value="1">
+                <ct:description language="all" text="F1"/>
+              </ct:option>
+              <ct:option value="2">
+                <ct:description language="all" text="F2"/>
+              </ct:option>
+              <ct:option value="3">
+                <ct:description language="all" text="F3"/>
+              </ct:option>
+              <ct:option value="4">
+                <ct:description language="all" text="F4"/>
+              </ct:option>
+              <ct:option value="5">
+                <ct:description language="all" text="F5"/>
+              </ct:option>
+              <ct:option value="6">
+                <ct:description language="all" text="F6"/>
+              </ct:option>
+              <ct:option value="7">
+                <ct:description language="all" text="F7"/>
+              </ct:option>
+              <ct:option value="8">
+                <ct:description language="all" text="F8"/>
+              </ct:option>
+              <ct:option value="9">
+                <ct:description language="all" text="F9"/>
+              </ct:option>
+              <ct:option value="10">
+                <ct:description language="all" text="F10"/>
+              </ct:option>
+              <ct:option value="11">
+                <ct:description language="all" text="F11"/>
+              </ct:option>
+              <ct:option value="12">
+                <ct:description language="all" text="F12"/>
+              </ct:option>
+            </ct:group>
+          </ct:cv>
+          <ct:cvGroup id="2663" type="matrix">
+            <ct:description language="de" text="Maske Abkupplen"/>
+            <ct:conditions>
+              <ct:trigger value="notRelevant">
+                <ct:condition type="relational" operation="equal" cv="151" value="0"/>
+              </ct:trigger>
+            </ct:conditions>
+            <ct:cv id="849" number="152" type="select" possibleValues="0;4;8;12;16;20;24;28;32;36;40;44;48;52;56;60;64;68;72;76;80;84;88;92;96;100;104;108;112;116;120;124;128;132;136;140;144;148;152;156;160;164;168;172;176;180;184;188;192;196;200;204;208;212;216;220;224;228;232;236;240;244;248;252" defaultValue="8" mode="rw">
+              <ct:description language="de" text="Abkuppeln-Maske vorwärts"/>
+              <ct:bit number="2" value="4">
+                <ct:description language="all" text="F2"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="all" text="F3"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="all" text="F4"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="all" text="F5"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="all" text="F6"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="all" text="F7"/>
+              </ct:bit>
+            </ct:cv>
+            <ct:cv id="850" number="153" type="select" possibleValues="0;4;8;12;16;20;24;28;32;36;40;44;48;52;56;60;64;68;72;76;80;84;88;92;96;100;104;108;112;116;120;124;128;132;136;140;144;148;152;156;160;164;168;172;176;180;184;188;192;196;200;204;208;212;216;220;224;228;232;236;240;244;248;252" defaultValue="8" mode="rw">
+              <ct:description language="de" text="Abkuppeln-Maske rückwärts"/>
+              <ct:bit number="2" value="4">
+                <ct:description language="all" text="F2"/>
+              </ct:bit>
+              <ct:bit number="3" value="8">
+                <ct:description language="all" text="F3"/>
+              </ct:bit>
+              <ct:bit number="4" value="16">
+                <ct:description language="all" text="F4"/>
+              </ct:bit>
+              <ct:bit number="5" value="32">
+                <ct:description language="all" text="F5"/>
+              </ct:bit>
+              <ct:bit number="6" value="64">
+                <ct:description language="all" text="F6"/>
+              </ct:bit>
+              <ct:bit number="7" value="128">
+                <ct:description language="all" text="F7"/>
+              </ct:bit>
+            </ct:cv>
+          </ct:cvGroup>
+          <ct:cvGroup id="2656" type="matrix">
+            <ct:description language="de" text="Effekte"/>
+            <ct:cv id="851" number="154" type="select" possibleValues="0-11;64-75;128-139" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Effekte für F0f"/>
+              <ct:conditions>
+                <ct:trigger value="reset" target="group:1">
+                  <ct:condition type="relational" operation="equal" cv="154" selection="group:0" value="0"/>
+                </ct:trigger>
+              </ct:conditions>
+              <ct:group number="0">
+                <ct:option value="0">
+                  <ct:description language="de" text="deaktiviert"/>
+                </ct:option>
+                <ct:option value="1">
+                  <ct:description language="de" text="Blinken"/>
+                </ct:option>
+                <ct:option value="2">
+                  <ct:description language="de" text="Blinken im Gegentakt"/>
+                </ct:option>
+                <ct:option value="3">
+                  <ct:description language="de" text="Single Pulse Strobe"/>
+                </ct:option>
+                <ct:option value="4">
+                  <ct:description language="de" text="Double Strobe"/>
+                </ct:option>
+                <ct:option value="5">
+                  <ct:description language="de" text="Flashing Headlight"/>
+                </ct:option>
+                <ct:option value="6">
+                  <ct:description language="de" text="Ditch-Light links"/>
+                </ct:option>
+                <ct:option value="7">
+                  <ct:description language="de" text="Ditch-Light rechts"/>
+                </ct:option>
+                <ct:option value="8">
+                  <ct:description language="de" text="Rotary beacon"/>
+                </ct:option>
+                <ct:option value="9">
+                  <ct:description language="de" text="Gyralite"/>
+                </ct:option>
+                <ct:option value="10">
+                  <ct:description language="de" text="Mars Light"/>
+                </ct:option>
+                <ct:option value="11">
+                  <ct:description language="de" text="Soft-Start"/>
+                </ct:option>
+              </ct:group>
+              <ct:group number="1">
+                <ct:option value="0">
+                  <ct:description language="de" text="Beide Fahrtrichtungen"/>
+                </ct:option>
+                <ct:option value="64">
+                  <ct:description language="de" text="Für Vorwärtsfahrt"/>
+                </ct:option>
+                <ct:option value="128">
+                  <ct:description language="de" text="Für Rückwärtsfahrt"/>
+                </ct:option>
+              </ct:group>
+            </ct:cv>
+            <ct:cv id="852" number="155" type="select" possibleValues="0-11;64-75;128-139" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Effekte für F0r"/>
+              <ct:conditions>
+                <ct:trigger value="reset" target="group:1">
+                  <ct:condition type="relational" operation="equal" cv="155" selection="group:0" value="0"/>
+                </ct:trigger>
+              </ct:conditions>
+              <ct:group number="0">
+                <ct:option value="0">
+                  <ct:description language="de" text="deaktiviert"/>
+                </ct:option>
+                <ct:option value="1">
+                  <ct:description language="de" text="Blinken"/>
+                </ct:option>
+                <ct:option value="2">
+                  <ct:description language="de" text="Blinken im Gegentakt"/>
+                </ct:option>
+                <ct:option value="3">
+                  <ct:description language="de" text="Single Pulse Strobe"/>
+                </ct:option>
+                <ct:option value="4">
+                  <ct:description language="de" text="Double Strobe"/>
+                </ct:option>
+                <ct:option value="5">
+                  <ct:description language="de" text="Flashing Headlight"/>
+                </ct:option>
+                <ct:option value="6">
+                  <ct:description language="de" text="Ditch-Light links"/>
+                </ct:option>
+                <ct:option value="7">
+                  <ct:description language="de" text="Ditch-Light rechts"/>
+                </ct:option>
+                <ct:option value="8">
+                  <ct:description language="de" text="Rotary beacon"/>
+                </ct:option>
+                <ct:option value="9">
+                  <ct:description language="de" text="Gyralite"/>
+                </ct:option>
+                <ct:option value="10">
+                  <ct:description language="de" text="Mars Light"/>
+                </ct:option>
+                <ct:option value="11">
+                  <ct:description language="de" text="Soft-Start"/>
+                </ct:option>
+              </ct:group>
+              <ct:group number="1">
+                <ct:option value="0">
+                  <ct:description language="de" text="Beide Fahrtrichtungen"/>
+                </ct:option>
+                <ct:option value="64">
+                  <ct:description language="de" text="Für Vorwärtsfahrt"/>
+                </ct:option>
+                <ct:option value="128">
+                  <ct:description language="de" text="Für Rückwärtsfahrt"/>
+                </ct:option>
+              </ct:group>
+            </ct:cv>
+            <ct:cv id="853R0" number="156" type="select" possibleValues="0-11;64-75;128-139" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Effekte für AUX1"/>
+              <ct:conditions>
+                <ct:trigger value="reset" target="group:1">
+                  <ct:condition type="relational" operation="equal" cv="156" selection="group:0" value="0"/>
+                </ct:trigger>
+              </ct:conditions>
+              <ct:group number="0">
+                <ct:option value="0">
+                  <ct:description language="de" text="deaktiviert"/>
+                </ct:option>
+                <ct:option value="1">
+                  <ct:description language="de" text="Blinken"/>
+                </ct:option>
+                <ct:option value="2">
+                  <ct:description language="de" text="Blinken im Gegentakt"/>
+                </ct:option>
+                <ct:option value="3">
+                  <ct:description language="de" text="Single Pulse Strobe"/>
+                </ct:option>
+                <ct:option value="4">
+                  <ct:description language="de" text="Double Strobe"/>
+                </ct:option>
+                <ct:option value="5">
+                  <ct:description language="de" text="Flashing Headlight"/>
+                </ct:option>
+                <ct:option value="6">
+                  <ct:description language="de" text="Ditch-Light links"/>
+                </ct:option>
+                <ct:option value="7">
+                  <ct:description language="de" text="Ditch-Light rechts"/>
+                </ct:option>
+                <ct:option value="8">
+                  <ct:description language="de" text="Rotary beacon"/>
+                </ct:option>
+                <ct:option value="9">
+                  <ct:description language="de" text="Gyralite"/>
+                </ct:option>
+                <ct:option value="10">
+                  <ct:description language="de" text="Mars Light"/>
+                </ct:option>
+                <ct:option value="11">
+                  <ct:description language="de" text="Soft-Start"/>
+                </ct:option>
+              </ct:group>
+              <ct:group number="1">
+                <ct:option value="0">
+                  <ct:description language="de" text="Beide Fahrtrichtungen"/>
+                </ct:option>
+                <ct:option value="64">
+                  <ct:description language="de" text="Für Vorwärtsfahrt"/>
+                </ct:option>
+                <ct:option value="128">
+                  <ct:description language="de" text="Für Rückwärtsfahrt"/>
+                </ct:option>
+              </ct:group>
+            </ct:cv>
+            <ct:cv id="853R1" number="157" type="select" possibleValues="0-11;64-75;128-139" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Effekte für AUX2"/>
+              <ct:conditions>
+                <ct:trigger value="reset" target="group:1">
+                  <ct:condition type="relational" operation="equal" cv="157" selection="group:0" value="0"/>
+                </ct:trigger>
+              </ct:conditions>
+              <ct:group number="0">
+                <ct:option value="0">
+                  <ct:description language="de" text="deaktiviert"/>
+                </ct:option>
+                <ct:option value="1">
+                  <ct:description language="de" text="Blinken"/>
+                </ct:option>
+                <ct:option value="2">
+                  <ct:description language="de" text="Blinken im Gegentakt"/>
+                </ct:option>
+                <ct:option value="3">
+                  <ct:description language="de" text="Single Pulse Strobe"/>
+                </ct:option>
+                <ct:option value="4">
+                  <ct:description language="de" text="Double Strobe"/>
+                </ct:option>
+                <ct:option value="5">
+                  <ct:description language="de" text="Flashing Headlight"/>
+                </ct:option>
+                <ct:option value="6">
+                  <ct:description language="de" text="Ditch-Light links"/>
+                </ct:option>
+                <ct:option value="7">
+                  <ct:description language="de" text="Ditch-Light rechts"/>
+                </ct:option>
+                <ct:option value="8">
+                  <ct:description language="de" text="Rotary beacon"/>
+                </ct:option>
+                <ct:option value="9">
+                  <ct:description language="de" text="Gyralite"/>
+                </ct:option>
+                <ct:option value="10">
+                  <ct:description language="de" text="Mars Light"/>
+                </ct:option>
+                <ct:option value="11">
+                  <ct:description language="de" text="Soft-Start"/>
+                </ct:option>
+              </ct:group>
+              <ct:group number="1">
+                <ct:option value="0">
+                  <ct:description language="de" text="Beide Fahrtrichtungen"/>
+                </ct:option>
+                <ct:option value="64">
+                  <ct:description language="de" text="Für Vorwärtsfahrt"/>
+                </ct:option>
+                <ct:option value="128">
+                  <ct:description language="de" text="Für Rückwärtsfahrt"/>
+                </ct:option>
+              </ct:group>
+            </ct:cv>
+            <ct:cv id="853R2" number="158" type="select" possibleValues="0-11;64-75;128-139" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Effekte für AUX3"/>
+              <ct:conditions>
+                <ct:trigger value="reset" target="group:1">
+                  <ct:condition type="relational" operation="equal" cv="158" selection="group:0" value="0"/>
+                </ct:trigger>
+              </ct:conditions>
+              <ct:group number="0">
+                <ct:option value="0">
+                  <ct:description language="de" text="deaktiviert"/>
+                </ct:option>
+                <ct:option value="1">
+                  <ct:description language="de" text="Blinken"/>
+                </ct:option>
+                <ct:option value="2">
+                  <ct:description language="de" text="Blinken im Gegentakt"/>
+                </ct:option>
+                <ct:option value="3">
+                  <ct:description language="de" text="Single Pulse Strobe"/>
+                </ct:option>
+                <ct:option value="4">
+                  <ct:description language="de" text="Double Strobe"/>
+                </ct:option>
+                <ct:option value="5">
+                  <ct:description language="de" text="Flashing Headlight"/>
+                </ct:option>
+                <ct:option value="6">
+                  <ct:description language="de" text="Ditch-Light links"/>
+                </ct:option>
+                <ct:option value="7">
+                  <ct:description language="de" text="Ditch-Light rechts"/>
+                </ct:option>
+                <ct:option value="8">
+                  <ct:description language="de" text="Rotary beacon"/>
+                </ct:option>
+                <ct:option value="9">
+                  <ct:description language="de" text="Gyralite"/>
+                </ct:option>
+                <ct:option value="10">
+                  <ct:description language="de" text="Mars Light"/>
+                </ct:option>
+                <ct:option value="11">
+                  <ct:description language="de" text="Soft-Start"/>
+                </ct:option>
+              </ct:group>
+              <ct:group number="1">
+                <ct:option value="0">
+                  <ct:description language="de" text="Beide Fahrtrichtungen"/>
+                </ct:option>
+                <ct:option value="64">
+                  <ct:description language="de" text="Für Vorwärtsfahrt"/>
+                </ct:option>
+                <ct:option value="128">
+                  <ct:description language="de" text="Für Rückwärtsfahrt"/>
+                </ct:option>
+              </ct:group>
+            </ct:cv>
+            <ct:cv id="853R3" number="159" type="select" possibleValues="0-11;64-75;128-139" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Effekte für AUX4"/>
+              <ct:conditions>
+                <ct:trigger value="reset" target="group:1">
+                  <ct:condition type="relational" operation="equal" cv="159" selection="group:0" value="0"/>
+                </ct:trigger>
+              </ct:conditions>
+              <ct:group number="0">
+                <ct:option value="0">
+                  <ct:description language="de" text="deaktiviert"/>
+                </ct:option>
+                <ct:option value="1">
+                  <ct:description language="de" text="Blinken"/>
+                </ct:option>
+                <ct:option value="2">
+                  <ct:description language="de" text="Blinken im Gegentakt"/>
+                </ct:option>
+                <ct:option value="3">
+                  <ct:description language="de" text="Single Pulse Strobe"/>
+                </ct:option>
+                <ct:option value="4">
+                  <ct:description language="de" text="Double Strobe"/>
+                </ct:option>
+                <ct:option value="5">
+                  <ct:description language="de" text="Flashing Headlight"/>
+                </ct:option>
+                <ct:option value="6">
+                  <ct:description language="de" text="Ditch-Light links"/>
+                </ct:option>
+                <ct:option value="7">
+                  <ct:description language="de" text="Ditch-Light rechts"/>
+                </ct:option>
+                <ct:option value="8">
+                  <ct:description language="de" text="Rotary beacon"/>
+                </ct:option>
+                <ct:option value="9">
+                  <ct:description language="de" text="Gyralite"/>
+                </ct:option>
+                <ct:option value="10">
+                  <ct:description language="de" text="Mars Light"/>
+                </ct:option>
+                <ct:option value="11">
+                  <ct:description language="de" text="Soft-Start"/>
+                </ct:option>
+              </ct:group>
+              <ct:group number="1">
+                <ct:option value="0">
+                  <ct:description language="de" text="Beide Fahrtrichtungen"/>
+                </ct:option>
+                <ct:option value="64">
+                  <ct:description language="de" text="Für Vorwärtsfahrt"/>
+                </ct:option>
+                <ct:option value="128">
+                  <ct:description language="de" text="Für Rückwärtsfahrt"/>
+                </ct:option>
+              </ct:group>
+            </ct:cv>
+            <ct:cv id="853R4" number="160" type="select" possibleValues="0-11;64-75;128-139" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Effekte für AUX5"/>
+              <ct:conditions>
+                <ct:trigger value="reset" target="group:1">
+                  <ct:condition type="relational" operation="equal" cv="160" selection="group:0" value="0"/>
+                </ct:trigger>
+              </ct:conditions>
+              <ct:group number="0">
+                <ct:option value="0">
+                  <ct:description language="de" text="deaktiviert"/>
+                </ct:option>
+                <ct:option value="1">
+                  <ct:description language="de" text="Blinken"/>
+                </ct:option>
+                <ct:option value="2">
+                  <ct:description language="de" text="Blinken im Gegentakt"/>
+                </ct:option>
+                <ct:option value="3">
+                  <ct:description language="de" text="Single Pulse Strobe"/>
+                </ct:option>
+                <ct:option value="4">
+                  <ct:description language="de" text="Double Strobe"/>
+                </ct:option>
+                <ct:option value="5">
+                  <ct:description language="de" text="Flashing Headlight"/>
+                </ct:option>
+                <ct:option value="6">
+                  <ct:description language="de" text="Ditch-Light links"/>
+                </ct:option>
+                <ct:option value="7">
+                  <ct:description language="de" text="Ditch-Light rechts"/>
+                </ct:option>
+                <ct:option value="8">
+                  <ct:description language="de" text="Rotary beacon"/>
+                </ct:option>
+                <ct:option value="9">
+                  <ct:description language="de" text="Gyralite"/>
+                </ct:option>
+                <ct:option value="10">
+                  <ct:description language="de" text="Mars Light"/>
+                </ct:option>
+                <ct:option value="11">
+                  <ct:description language="de" text="Soft-Start"/>
+                </ct:option>
+              </ct:group>
+              <ct:group number="1">
+                <ct:option value="0">
+                  <ct:description language="de" text="Beide Fahrtrichtungen"/>
+                </ct:option>
+                <ct:option value="64">
+                  <ct:description language="de" text="Für Vorwärtsfahrt"/>
+                </ct:option>
+                <ct:option value="128">
+                  <ct:description language="de" text="Für Rückwärtsfahrt"/>
+                </ct:option>
+              </ct:group>
+            </ct:cv>
+            <ct:cv id="853R5" number="161" type="select" possibleValues="0-11;64-75;128-139" defaultValue="0" mode="rw">
+              <ct:description language="de" text="Effekte für AUX6"/>
+              <ct:conditions>
+                <ct:trigger value="reset" target="group:1">
+                  <ct:condition type="relational" operation="equal" cv="161" selection="group:0" value="0"/>
+                </ct:trigger>
+              </ct:conditions>
+              <ct:group number="0">
+                <ct:option value="0">
+                  <ct:description language="de" text="deaktiviert"/>
+                </ct:option>
+                <ct:option value="1">
+                  <ct:description language="de" text="Blinken"/>
+                </ct:option>
+                <ct:option value="2">
+                  <ct:description language="de" text="Blinken im Gegentakt"/>
+                </ct:option>
+                <ct:option value="3">
+                  <ct:description language="de" text="Single Pulse Strobe"/>
+                </ct:option>
+                <ct:option value="4">
+                  <ct:description language="de" text="Double Strobe"/>
+                </ct:option>
+                <ct:option value="5">
+                  <ct:description language="de" text="Flashing Headlight"/>
+                </ct:option>
+                <ct:option value="6">
+                  <ct:description language="de" text="Ditch-Light links"/>
+                </ct:option>
+                <ct:option value="7">
+                  <ct:description language="de" text="Ditch-Light rechts"/>
+                </ct:option>
+                <ct:option value="8">
+                  <ct:description language="de" text="Rotary beacon"/>
+                </ct:option>
+                <ct:option value="9">
+                  <ct:description language="de" text="Gyralite"/>
+                </ct:option>
+                <ct:option value="10">
+                  <ct:description language="de" text="Mars Light"/>
+                </ct:option>
+                <ct:option value="11">
+                  <ct:description language="de" text="Soft-Start"/>
+                </ct:option>
+              </ct:group>
+              <ct:group number="1">
+                <ct:option value="0">
+                  <ct:description language="de" text="Beide Fahrtrichtungen"/>
+                </ct:option>
+                <ct:option value="64">
+                  <ct:description language="de" text="Für Vorwärtsfahrt"/>
+                </ct:option>
+                <ct:option value="128">
+                  <ct:description language="de" text="Für Rückwärtsfahrt"/>
+                </ct:option>
+              </ct:group>
+            </ct:cv>
+          </ct:cvGroup>
+        </cvs>
+        <cvStructure>
+          <category>
+            <ct:description language="de" text="Informationen"/>
+            <idReference id="25"/>
+            <idReference id="26"/>
+            <idReference id="804"/>
+            <idReference id="14R0"/>
+            <idReference id="14R1"/>
+          </category>
+          <category>
+            <ct:description language="de" text="Grundeinstellungen"/>
+            <idReference id="803"/>
+          </category>
+          <category>
+            <ct:description language="de" text="Adressen"/>
+            <idReference id="1"/>
+            <idReference id="10"/>
+            <idReference id="35"/>
+            <idReference id="803" activeItems="bit:5"/>
+          </category>
+          <category>
+            <ct:description language="de" text="Motorregelung"/>
+            <idReference id="802"/>
+            <idReference id="807"/>
+            <idReference id="808"/>
+            <idReference id="809"/>
+            <idReference id="817"/>
+            <idReference id="836" activeItems="bit:7"/>
+          </category>
+          <category>
+            <ct:description language="de" text="Mehrfachtraktion"/>
+            <idReference id="35"/>
+          </category>
+          <category>
+            <ct:description language="de" text="Analogbetrieb"/>
+            <idReference id="30"/>
+            <idReference id="803" activeItems="bit:2"/>
+          </category>
+          <category>
+            <ct:description language="de" text="Fahreigenschaften"/>
+            <idReference id="797"/>
+            <idReference id="798"/>
+            <idReference id="799"/>
+            <idReference id="800"/>
+            <idReference id="801"/>
+            <idReference id="803" activeItems="bit:4"/>
+            <idReference id="833"/>
+            <category>
+              <ct:description language="de" text="Bremsen"/>
+              <idReference id="833" activeItems="bit:3;bit:4"/>
+            </category>
+            <category>
+              <ct:description language="de" text="Rangieren"/>
+              <idReference id="833" activeItems="bit:0;bit:1;bit:6"/>
+            </category>
+            <category>
+              <ct:description language="de" text="HLU"/>
+              <idReference id="814"/>
+              <idReference id="815"/>
+              <idReference id="816"/>
+              <idReference id="818"/>
+              <idReference id="819"/>
+              <idReference id="820"/>
+              <idReference id="836" activeItems="bit:4"/>
+              <idReference id="837"/>
+            </category>
+          </category>
+          <category>
+            <ct:description language="de" text="Geschwindigkeitskennline"/>
+            <idReference id="803" activeItems="bit:4"/>
+            <idReference id="805"/>
+          </category>
+          <category>
+            <ct:description language="de" text="Funktionstasten"/>
+            <idReference id="2661"/>
+            <category>
+              <ct:description language="de" text="Dimmen"/>
+              <idReference id="811"/>
+              <idReference id="822"/>
+              <idReference id="834"/>
+              <idReference id="835"/>
+              <idReference id="824"/>
+            </category>
+            <category>
+              <ct:description language="de" text="Effekte"/>
+              <idReference id="822"/>
+              <idReference id="823"/>
+              <idReference id="825"/>
+              <idReference id="2656"/>
+            </category>
+          </category>
+          <category>
+            <ct:description language="de" text="Erweiterungen"/>
+            <idReference id="832"/>
+            <idReference id="821"/>
+            <idReference id="836"/>
+            <idReference id="838"/>
+            <idReference id="839"/>
+            <idReference id="840"/>
+            <idReference id="841"/>
+            <idReference id="842"/>
+            <idReference id="843"/>
+            <category>
+              <ct:description language="de" text="Kupplung"/>
+              <idReference id="812"/>
+              <idReference id="813"/>
+              <idReference id="844"/>
+              <idReference id="845"/>
+              <idReference id="846"/>
+              <idReference id="847"/>
+              <idReference id="848"/>
+              <idReference id="2663"/>
+            </category>
+            <category>
+              <ct:description language="de" text="Programmierhilfe"/>
+              <idReference id="810"/>
+            </category>
+          </category>
+        </cvStructure>
+      </protocol>
+    </protocols>
+  </firmware>
+</decoderFirmwareDefinition>

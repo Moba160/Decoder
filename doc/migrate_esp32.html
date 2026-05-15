@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>ESP32 Migration Guide - DCC Decoder UI</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; background: #f4f4f9; color: #333; }
+        h1 { color: #082f49; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; }
+        h2 { color: #0369a1; margin-top: 30px; }
+        code { background: #e0f2fe; padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        pre { background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        .note { background: #fff9c4; border-left: 5px solid #fbc02d; padding: 15px; margin: 20px 0; }
+        .step { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>ESP32 Integrations-Leitfaden</h1>
+    <p>Dieses Dokument beschreibt, wie das DCC-Decoder-Konfigurationsinterface in ein ESP32-Projekt (z.B. unter PlatformIO) integriert wird.</p>
+
+    <h2>1. Architektur-Entscheidung</h2>
+    <div class="note">
+        <strong>WICHTIG:</strong> Das Parsing der <code>.decdb</code> (XML) Dateien erfolgt <strong>vollständig im Browser (Client-side)</strong>. Der ESP32 fungiert lediglich als statischer Webserver und als API-Gateway zur DCC-Hardware.
+    </div>
+
+    <h2>2. Dateisystem-Setup (LittleFS)</h2>
+    <p>Der ESP32 sollte <strong>LittleFS</strong> verwenden. Die Dateien aus diesem Projekt werden in den <code>data/</code> Ordner des PlatformIO-Projekts kopiert:</p>
+    <ul>
+        <li><code>data/index.html</code></li>
+        <li><code>data/style.css</code></li>
+        <li><code>data/app.js</code></li>
+        <li><code>data/files.js</code> (Liste der verfügbaren Decoder)</li>
+        <li><code>data/decoder/*.decdb</code> (Die XML-Definitionen)</li>
+        <li><code>data/decoder/hersteller.json</code></li>
+    </ul>
+
+    <h2>3. Webserver-Endpunkte (ESP32 Seite)</h2>
+    <p>Der ESP32 muss folgende Routen bereitstellen:</p>
+    <pre>
+// Beispiel mit ESPAsyncWebServer
+server.on("/api/read", HTTP_GET, [](AsyncWebServerRequest *request){
+    int cv = request->getParam("cv")->value().toInt();
+    // Hardware-Logik: DCC Lese-Befehl auslösen
+    int value = dccMain.readCV(cv); 
+    request->send(200, "text/plain", String(value));
+});
+
+server.on("/api/write", HTTP_POST, [](AsyncWebServerRequest *request){
+    int cv = request->getParam("cv")->value().toInt();
+    int val = request->getParam("val")->value().toInt();
+    // Hardware-Logik: DCC Schreib-Befehl auslösen
+    dccMain.writeCV(cv, val);
+    request->send(200);
+});</pre>
+
+    <h2>4. Anpassungen in <code>app.js</code></h2>
+    <p>In der <code>app.js</code> müssen die Dummy-Funktionen für Read/Write durch echte API-Calls ersetzt werden:</p>
+    <pre>
+// In app.js (Beispiel für Read)
+async function readCVFromHardware(cvNumber) {
+    const response = await fetch(`/api/read?cv=${cvNumber}`);
+    const value = await response.text();
+    return parseInt(value);
+}
+
+// Beispiel für Write
+async function writeCVToHardware(cvNumber, value) {
+    await fetch(`/api/write?cv=${cvNumber}&val=${value}`, { method: 'POST' });
+}</pre>
+
+    <h2>5. Optimierung für Flash-Speicher</h2>
+    <p>Da <code>.decdb</code> Dateien groß sein können (z.B. >700KB), empfiehlt es sich:</p>
+    <ol>
+        <li>Nur die benötigten Decoder-Dateien in den Flash zu laden.</li>
+        <li>Dateien mit GZIP zu komprimieren (LittleFS unterstützt <code>.gz</code> Dateien, die der Webserver automatisch erkennt).</li>
+    </ol>
+
+    <p><em>Dokumentation erstellt am 15.05.2026 für Projekt FRANKYmini / PlatformIO.</em></p>
+</body>
+</html>

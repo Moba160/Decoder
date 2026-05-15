@@ -1,0 +1,36 @@
+[
+  {
+    "name": "cT / Tran",
+    "url": "https://www.decoderdb.de/datenbank/hersteller/ct-tran",
+    "decoder": [
+      {"name": "DCX32", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx32-237", "type": "Funktionsdecoder", "in_production": false, "max_current": 0.8, "max_voltage": 21.0, "fa_count": 4, "length": 13.0, "width": 9.0, "height": 2.0},
+      {"name": "DCX33", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx33-236", "type": "Funktionsdecoder", "in_production": false, "max_current": 0.8, "max_voltage": 21.0, "fa_count": 8, "length": 10.4, "width": 6.7, "height": 1.4},
+      {"name": "DCX51", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx51-72", "type": "Lokdecoder", "in_production": false, "max_current": 1.5, "max_voltage": 21.0, "fa_count": 8, "length": 25.0, "width": 15.0, "height": 3.7},
+      {"name": "DCX52", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx52-73", "type": "Lokdecoder", "in_production": false, "max_current": 1.2, "max_voltage": 21.0, "fa_count": 8, "length": 17.0, "width": 11.0, "height": 2.3},
+      {"name": "DCX70", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx70-75", "type": "Lokdecoder", "in_production": false, "max_current": 0.8, "max_voltage": 18.0, "fa_count": 7, "length": 19.0, "width": 11.0, "height": 4.5},
+      {"name": "DCX70-2", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx70-2-241", "type": "Lokdecoder", "in_production": false, "max_current": 1.0, "max_voltage": 21.0, "fa_count": 7, "length": 17.0, "width": 11.0, "height": 2.6},
+      {"name": "DCX74", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx74-38", "type": "Lokdecoder", "in_production": false, "max_current": 0.8, "max_voltage": 18.0, "fa_count": 4, "length": 13.0, "width": 9.0, "height": 1.5},
+      {"name": "DCX74z", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx74z-86", "type": "Lokdecoder", "in_production": false, "max_current": 1.0, "max_voltage": 18.0, "fa_count": 4, "length": 9.0, "width": 7.0, "height": 2.6},
+      {"name": "DCX75", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx75-37", "type": "Lokdecoder", "in_production": false, "max_current": 1.0, "max_voltage": 18.0, "fa_count": 2, "length": 11.0, "width": 7.2, "height": 1.4},
+      {"name": "DCX76", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx76-27", "type": "Lokdecoder", "in_production": false, "max_current": 0.8, "max_voltage": 18.0, "fa_count": 4, "length": 10.8, "width": 7.1, "height": 1.3},
+      {"name": "DCX76z", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx76z-85", "type": "Lokdecoder", "in_production": false, "max_current": 0.8, "max_voltage": 18.0, "fa_count": 4, "length": 6.9, "width": 6.1, "height": 1.7},
+      {"name": "DCX77L", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx77l-84", "type": "Lokdecoder", "in_production": false, "max_current": 0.8, "max_voltage": 18.0, "fa_count": 4, "length": 9.5, "width": 4.0, "height": 1.8},
+      {"name": "DCX77z", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-dcx77z-39", "type": "Lokdecoder", "in_production": false, "max_current": 0.8, "max_voltage": 16.0, "fa_count": 4, "length": 7.6, "width": 5.0, "height": 1.8},
+      {"name": "SL51", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-sl51-74", "type": "Sounddecoder", "in_production": false, "max_current": 1.5, "max_voltage": 18.0, "fa_count": 4, "length": 27.0, "width": 15.0, "height": 3.7},
+      {"name": "SL74", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-sl74-40", "type": "Sounddecoder", "in_production": false, "max_current": 0.6, "max_voltage": 21.0, "fa_count": 4, "length": 24.0, "width": 9.0, "height": 3.5},
+      {"name": "SL75", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-sl75-41", "type": "Sounddecoder", "in_production": false, "max_current": 0.8, "max_voltage": 18.0, "fa_count": 4, "length": 24.0, "width": 9.0, "height": 3.5},
+      {"name": "SL76", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-sl76-42", "type": "Sounddecoder", "in_production": false, "max_current": 0.8, "max_voltage": 18.0, "fa_count": 4, "length": 16.7, "width": 7.7, "height": 2.3},
+      {"name": "SL76Next18S", "url": "https://www.decoderdb.de/datenbank/decoder/ct-tran-sl76next18s-83", "type": "Sounddecoder", "in_production": false, "max_current": 1.0, "max_voltage": 18.0, "fa_count": 4, "length": 15.0, "width": 9.5, "height": 2.7}
+    ]
+  },
+  {
+    "name": "D&H",
+    "url": "https://www.decoderdb.de/datenbank/hersteller/dh",
+    "decoder": [
+      {"name": "DH05C", "url": "https://www.decoderdb.de/datenbank/decoder/dh-dh05c-1", "type": "Lokdecoder", "in_production": false, "max_current": 0.5, "max_voltage": 30.0, "fa_count": 4, "length": 12.9, "width": 6.7, "height": 1.4},
+      {"name": "DH10C", "url": "https://www.decoderdb.de/datenbank/decoder/dh-dh10c-2", "type": "Lokdecoder", "in_production": false, "max_current": 1.5, "max_voltage": 30.0, "fa_count": 4, "length": 12.7, "width": 8.9, "height": 1.4},
+      {"name": "DH16A", "url": "https://www.decoderdb.de/datenbank/decoder/dh-dh16a-29", "type": "Lokdecoder", "in_production": false, "max_current": 1.5, "max_voltage": 30.0, "fa_count": 6, "length": 15.9, "width": 10.9, "height": 2.3},
+      {"name": "SD16A", "url": "https://www.decoderdb.de/datenbank/decoder/dh-sd16a-34", "type": "Sounddecoder", "in_production": false, "max_current": 1.5, "max_voltage": 30.0, "fa_count": 8, "length": 21.5, "width": 10.5, "height": 3.0}
+    ]
+  }
+]

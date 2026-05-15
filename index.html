@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decoder Programmierung</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1 id="main-title">Decoder Programmierung</h1>
+        <button id="main-back-btn" style="display: none;">&larr; Zurück zur Auswahl</button>
+    </header>
+
+    <div class="container">
+        <!-- Decoder Selection Screen -->
+        <div id="file-selection" class="screen">
+            <div class="selection-header">
+                <h2>Decoder Auswahl</h2>
+                <div class="search-container">
+                    <input type="text" id="decoder-search" placeholder="Freitext-Suche (Name)...">
+                    <div id="search-results" class="search-results-overlay" style="display: none;">
+                        <div class="search-result-row">
+                            <span id="res-manufacturer" class="res-label">Hersteller</span>
+                            <div class="dropdown">
+                                <button id="res-decoder-btn" class="dropbtn">Decoder wählen</button>
+                                <div id="res-decoder-list" class="dropdown-content"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Filters -->
+            <div class="filter-section">
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>Typ</label>
+                        <select id="filter-type">
+                            <option value="">Alle Typen</option>
+                            <option value="Lokdecoder">Lokdecoder</option>
+                            <option value="Sounddecoder">Sounddecoder</option>
+                            <option value="Funktionsdecoder">Funktionsdecoder</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <select id="filter-production">
+                            <option value="">Alle Status</option>
+                            <option value="true">In Produktion</option>
+                            <option value="false">Nicht mehr in Produktion</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Strom (≥ A)</label>
+                        <input type="number" id="filter-current" step="0.1" placeholder="z.B. 1.0">
+                    </div>
+                    <div class="filter-group">
+                        <label>Spannung (≥ V)</label>
+                        <input type="number" id="filter-voltage" step="1" placeholder="z.B. 18">
+                    </div>
+                    <div class="filter-group">
+                        <label>FA (≥ Anz.)</label>
+                        <input type="number" id="filter-fa" step="1" placeholder="z.B. 4">
+                    </div>
+                    <div class="filter-group">
+                        <label>Länge (≤ mm)</label>
+                        <input type="number" id="filter-length" step="0.1" placeholder="z.B. 25">
+                    </div>
+                    <div class="filter-group">
+                        <label>Breite (≤ mm)</label>
+                        <input type="number" id="filter-width" step="0.1" placeholder="z.B. 15">
+                    </div>
+                    <div class="filter-group">
+                        <label>Höhe (≤ mm)</label>
+                        <input type="number" id="filter-height" step="0.1" placeholder="z.B. 5">
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button id="clear-filters" class="btn-secondary">Filter löschen</button>
+                </div>
+            </div>
+
+            <!-- Results Table -->
+            <div id="results-table-container" class="table-container" style="display: none;">
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Hersteller</th>
+                            <th>Decoder</th>
+                            <th>Typ</th>
+                            <th>Prod.</th>
+                            <th>Strom</th>
+                            <th>V</th>
+                            <th>FA</th>
+                            <th>L</th>
+                            <th>B</th>
+                            <th>H</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-tbody"></tbody>
+                </table>
+            </div>
+
+            <div class="navigation-columns" id="manual-selection-container">
+                <div class="nav-column">
+                    <h3>1. Hersteller</h3>
+                    <div id="manufacturer-list" class="nav-list"></div>
+                </div>
+                <div class="nav-column">
+                    <h3>2. Decoder</h3>
+                    <div id="decoder-list" class="nav-list empty">
+                        <p class="placeholder">Bitte zuerst einen Hersteller wählen</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Programming Screen -->
+        <div id="programming-screen" class="screen" style="display: none;">
+            <div class="header-row">
+                <button id="back-btn" class="btn-secondary">← Zurück</button>
+                <div class="decoder-info">
+                    <h2 id="decoder-name">Decoder Name</h2>
+                    <p id="firmware-info">Firmware Info</p>
+                </div>
+                <button id="reset-btn" class="btn-danger">Decoder-Reset</button>
+            </div>
+            <div class="content-layout">
+                <nav class="sidebar" id="group-nav"></nav>
+                <div id="cv-groups" class="cv-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Modal -->
+    <div id="reset-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Decoder zurücksetzen</h3>
+            <p id="reset-modal-text"></p>
+            <div class="modal-actions">
+                <button id="reset-confirm" class="btn-danger">Jetzt zurücksetzen</button>
+                <button id="reset-cancel" class="btn-secondary">Abbrechen</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="files.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
