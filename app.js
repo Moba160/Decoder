@@ -195,6 +195,63 @@ function isFilteringActive() {
         .some(id => document.getElementById(id).value !== '');
 }
 
+function populateFilters() {
+    const types = new Set();
+    const statuses = new Set();
+    
+    detailedManufacturers.forEach(m => {
+        if (m.decoder) {
+            m.decoder.forEach(d => {
+                // Heuristik falls Typ fehlt
+                if (!d.type) {
+                    const name = d.name.toLowerCase();
+                    if (name.includes('sound') || name.startsWith('sl') || name.includes('ms')) {
+                        d.type = "Sound-Decoder";
+                    } else if (d.fa_count > 0 || d.max_current > 0.1) {
+                        d.type = "Lok-Decoder";
+                    } else if (name.includes('servo') || name.includes('switch')) {
+                        d.type = "Zubehör-Decoder";
+                    }
+                }
+                
+                if (d.type) types.add(d.type);
+                statuses.add(d.in_production ? "Aktiv" : "Ausgelaufen");
+            });
+        }
+    });
+
+    const typeSelect = document.getElementById('filter-type');
+    if (typeSelect) {
+        const currentVal = typeSelect.value;
+        typeSelect.innerHTML = '<option value="">Alle Typen</option>';
+        [...types].sort().forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t;
+            opt.textContent = t;
+            typeSelect.appendChild(opt);
+        });
+        typeSelect.value = currentVal;
+    }
+
+    const statusSelect = document.getElementById('filter-production');
+    if (statusSelect) {
+        const currentVal = statusSelect.value;
+        statusSelect.innerHTML = '<option value="">Alle Status</option>';
+        // Wir erzwingen beide Optionen, auch wenn die Daten lückenhaft sind
+        const optAktiv = document.createElement('option');
+        optAktiv.value = "true";
+        optAktiv.textContent = "Aktiv";
+        statusSelect.appendChild(optAktiv);
+        
+        const optAus = document.createElement('option');
+        optAus.value = "false";
+        optAus.textContent = "Ausgelaufen";
+        statusSelect.appendChild(optAus);
+        
+        statusSelect.value = currentVal;
+    }
+}
+
 function updateFilterTooltips() {
     const allDecoders = detailedManufacturers.flatMap(m => m.decoder || []);
     
@@ -258,6 +315,7 @@ async function loadData() {
             totalDecoderCount = detailedManufacturers.reduce((sum, m) => sum + (m.decoder ? m.decoder.length : 0), 0);
             updateDecoderCount(totalDecoderCount);
             updateFilterTooltips();
+            populateFilters();
         }
     } catch (e) {
         console.warn("Stammdaten konnten nicht geladen werden:", e);

@@ -66,8 +66,19 @@ def main():
                         d_url = f"https://www.decoderdb.de{d_path}" if d_path.startswith('/') else d_path
                         
                         # Neue Felder extrahieren
-                        d_type = d_cols[1].get_text(strip=True)
-                        in_production = "check" in d_cols[2].find('i').get('class', []) if d_cols[2].find('i') else False
+                        type_span = d_cols[1].find('span', class_='fa')
+                        d_type = "Unbekannt"
+                        if type_span:
+                            t_title = type_span.get('title', '')
+                            if t_title:
+                                d_type = t_title
+                            else:
+                                classes = type_span.get('class', [])
+                                if "decoder-type-3" in classes: d_type = "Lok-Decoder"
+                                elif "decoder-type-4" in classes: d_type = "Sound-Decoder"
+                                elif "decoder-type-1" in classes: d_type = "Funktions-Decoder"
+                        
+                        in_production = bool(d_cols[2].find('span', class_='in-production'))
                         
                         # Hilfsfunktion zum Bereinigen von Zahlen
                         def clean_num(text):
