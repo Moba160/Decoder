@@ -409,7 +409,7 @@ function handleReset() {
     if (!currentResetCommand) return;
     const [cv, val] = currentResetCommand.split('=');
     resetModalText.innerHTML = `Möchten Sie den Decoder wirklich auf Werkseinstellungen zurücksetzen?<br><br><strong>Befehl: CV ${cv} = ${val}</strong>`;
-    resetModal.style.display = 'flex';
+    resetModal.style.display = 'block';
 }
 
 function performReset() {
