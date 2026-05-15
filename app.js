@@ -156,12 +156,11 @@ function isFilteringActive() {
 
 async function loadData() {
     try {
-        const [mResp, dResp] = await Promise.all([
-            fetch('decoder/hersteller.json'),
-            fetch('decoder/hersteller_detailed.json')
-        ]);
-        if (mResp.ok) manufacturers = await mResp.json();
-        if (dResp.ok) detailedManufacturers = await dResp.json();
+        const dResp = await fetch('decoder/hersteller_detailed.json');
+        if (dResp.ok) {
+            detailedManufacturers = await dResp.json();
+            manufacturers = detailedManufacturers.map(m => ({ id: m.id, name: m.name }));
+        }
     } catch (e) {
         console.warn("Stammdaten konnten nicht geladen werden:", e);
     }
@@ -248,10 +247,14 @@ async function loadDecoder(manufacturer, decoder) {
     
     if (fileUrl) {
         console.log(`Versuche Live-Laden von: ${fileUrl}`);
-        // Umgehe CORS-Probleme mit einem Proxy (allorigins.win ist oft zuverlässig)
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(fileUrl)}`;
-        await loadDecoderFile(proxyUrl, true);
-        return;
+        // Umgehe CORS-Probleme mit einem Proxy (corsproxy.io ist oft zuverlässig)
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(fileUrl)}`;
+        try {
+            await loadDecoderFile(proxyUrl, true);
+            return; // Erfolgreich geladen
+        } catch (e) {
+            console.warn("Live-Laden über Proxy fehlgeschlagen, versuche lokalen Fallback...", e);
+        }
     }
 
     // Fallback: Suche in lokalen Dateien wie bisher
@@ -292,7 +295,11 @@ async function loadDecoderFile(url, isRemote = false) {
         showProgrammingScreen();
     } catch (error) {
         console.error("Ladefehler:", error);
-        alert(`Fehler beim Laden: ${error.message}${isRemote ? '\n(Möglicherweise CORS-Einschränkung)' : ''}`);
+        if (isRemote) {
+            throw error; // An loadDecoder zurückgeben für Fallback
+        } else {
+            alert(`Fehler beim Laden: ${error.message}`);
+        }
     }
 }
 

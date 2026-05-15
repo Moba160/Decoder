@@ -111,7 +111,7 @@
                 <div class="nav-column">
                     <h3>2. Decoder</h3>
                     <div id="decoder-list" class="nav-list empty">
-                        <p class="placeholder">Bitte zuerst einen Hersteller wählen</p>
+                        <p class="placeholder">Bitte wähle zuerst einen Hersteller aus.</p>
                     </div>
                 </div>
             </div>
@@ -129,19 +129,21 @@
             </div>
             <div class="content-layout">
                 <nav class="sidebar" id="group-nav"></nav>
-                <div id="cv-groups" class="cv-container"></div>
+                <div class="main-content">
+                    <div id="cv-groups"></div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Reset Modal -->
-    <div id="reset-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Decoder zurücksetzen</h3>
-            <p id="reset-modal-text"></p>
-            <div class="modal-actions">
-                <button id="reset-confirm" class="btn-danger">Jetzt zurücksetzen</button>
-                <button id="reset-cancel" class="btn-secondary">Abbrechen</button>
+        <!-- Reset Modal -->
+        <div id="reset-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <h3>Werkseinstellungen</h3>
+                <p id="reset-modal-text"></p>
+                <div class="modal-actions">
+                    <button id="reset-confirm" class="btn-danger">Jetzt zurücksetzen</button>
+                    <button id="reset-cancel" class="btn-secondary">Abbrechen</button>
+                </div>
             </div>
         </div>
     </div>
