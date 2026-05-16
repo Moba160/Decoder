@@ -88,6 +88,33 @@ h1 {
     color: var(--text-primary);
 }
 
+.title-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.env-marker {
+    background: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: help;
+    display: inline-flex;
+    align-items: center;
+}
+
+body.light-mode .env-marker {
+    background: rgba(202, 138, 4, 0.1);
+    color: #ca8a04;
+    border-color: rgba(202, 138, 4, 0.3);
+}
+
 #back-btn {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);

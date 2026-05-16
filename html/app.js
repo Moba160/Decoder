@@ -165,6 +165,12 @@ async function init() {
         document.querySelectorAll('.speed-curve-canvas').forEach(c => drawSpeedCurve(c));
     });
 
+    // Environment Marker
+    const envMarker = document.getElementById('env-marker');
+    if (envMarker && !isLocalHost()) {
+        envMarker.style.display = 'inline-flex';
+    }
+
     // Initial UI update for mode
     updateModeUI();
 }
