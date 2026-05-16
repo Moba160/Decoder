@@ -16,8 +16,43 @@ function isLocalHost() {
     return h !== 'moba160.github.io' && h !== ''; 
 }
 
+function showCustomModal(title, message, type = 'info') {
+    const modal = document.getElementById('custom-modal');
+    const titleEl = document.getElementById('modal-title');
+    const textEl = document.getElementById('modal-text');
+    const iconEl = document.getElementById('modal-icon');
+    const closeBtn = document.getElementById('modal-close');
+
+    titleEl.textContent = title;
+    textEl.innerHTML = message.replace(/\n/g, '<br>');
+    
+    // Reset classes
+    iconEl.className = 'modal-icon-container';
+    titleEl.style.color = '';
+
+    if (type === 'error') {
+        titleEl.style.color = 'var(--danger)';
+        iconEl.innerHTML = `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+    } else if (type === 'wip') {
+        titleEl.style.color = '#eab308';
+        iconEl.classList.add('icon-spin');
+        iconEl.innerHTML = `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="5"/></svg>`;
+    } else {
+        titleEl.style.color = 'var(--accent-color)';
+        iconEl.innerHTML = `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--accent-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+    }
+
+    modal.style.display = 'flex';
+    
+    const close = () => {
+        modal.style.display = 'none';
+        closeBtn.removeEventListener('click', close);
+    };
+    closeBtn.addEventListener('click', close);
+}
+
 function showEnvironmentHint(feature) {
-    alert(`Die Funktion "${feature}" ist nur verfügbar, wenn der Decoder-Programmer direkt auf einem FRANKY-Gerät (ESP32) läuft.\n\nIm aktuellen Modus (GitHub Pages) dient die Seite als reiner Viewer.`);
+    showCustomModal("Nur im Live-Modus", `Die Funktion "<strong>${feature}</strong>" ist nur verfügbar, wenn der Decoder-Programmer direkt auf einem FRANKY-Gerät (ESP32) läuft.<br><br>Im aktuellen Modus (GitHub Pages) dient die Seite als reiner Viewer.`);
 }
 
 function updateDecoderCount(count) {
@@ -55,9 +90,8 @@ async function init() {
     resManufacturerEl = document.getElementById('res-manufacturer');
     resDecoderBtn = document.getElementById('res-decoder-btn');
     resDecoderList = document.getElementById('res-decoder-list');
-    wipModal = document.getElementById('wip-modal');
-    wipCloseBtn = document.getElementById('wip-close');
-    wipCloseBtn.addEventListener('click', () => wipModal.style.display = 'none');
+    // Generic modal initialization is handled in showCustomModal to keep it flexible
+
 
     await loadData();
     renderManufacturers();
@@ -120,8 +154,26 @@ async function init() {
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
     });
 
+    // Mode selector initialization
+    const modePg = document.getElementById('mode-pg');
+    const modePom = document.getElementById('mode-pom');
+    [modePg, modePom].forEach(el => el.addEventListener('change', updateModeUI));
+
     window.addEventListener('resize', () => {
         document.querySelectorAll('.speed-curve-canvas').forEach(c => drawSpeedCurve(c));
+    });
+
+    // Initial UI update for mode
+    updateModeUI();
+}
+
+function updateModeUI() {
+    const modePom = document.getElementById('mode-pom');
+    if (!modePom) return;
+    const isPom = modePom.checked;
+    document.querySelectorAll('.btn-read').forEach(btn => {
+        btn.disabled = isPom;
+        btn.title = isPom ? "Steht bei PoM nicht zur Verfügung" : "Lesen";
     });
 }
 
@@ -454,7 +506,7 @@ async function loadDecoder(manufacturer, decoder) {
     if (fileName) {
         await loadDecoderFile(`decoder/${fileName}`);
     } else {
-        alert(`Keine passende Decoder-Beschreibungsdatei gefunden.\n\nLive-URL: ${fileUrl || 'Nicht verfügbar'}\nLokale Suche: Fehlgeschlagen`);
+        showCustomModal("Datei nicht gefunden", `Keine passende Decoder-Beschreibungsdatei im lokalen Speicher gefunden.<br><br><small>Live-URL: ${fileUrl || 'Nicht verfügbar'}</small>`, 'error');
     }
 }
 
@@ -475,7 +527,7 @@ async function loadDecoderFile(url, isRemote = false) {
         if (isRemote) {
             throw error; // An loadDecoder zurückgeben für Fallback
         } else {
-            alert(`Fehler beim Laden: ${error.message}`);
+            showCustomModal("Ladefehler", `Fehler beim Laden der Datei: ${error.message}`, 'error');
         }
     }
 }
@@ -493,7 +545,7 @@ function performReset() {
 }
 
 function showWipModal() {
-    if (wipModal) wipModal.style.display = 'flex';
+    showCustomModal("Funktion folgt", "Die Hardware-Anbindung erfolgt mittels M5Stack Atom S3 als WLAN-Bridge zu z21-kompatiblen Zentralen.", 'wip');
 }
 
 async function z21ReadCV(cv, inputEl) {
@@ -518,7 +570,7 @@ async function z21ReadCV(cv, inputEl) {
                 }
                 return true;
             } else if (data.val === -2) {
-                alert(`Fehler beim Lesen von CV ${cv} (NACK)`);
+                showCustomModal("Lesefehler", `Der Decoder hat das Lesen von CV ${cv} nicht quittiert (NACK).`, 'error');
                 return true;
             }
             return false;
@@ -529,12 +581,12 @@ async function z21ReadCV(cv, inputEl) {
             attempts++;
             if (await pollResult() || attempts > 20) {
                 clearInterval(interval);
-                if (attempts > 20) alert(`Timeout beim Lesen von CV ${cv}`);
+                if (attempts > 20) showCustomModal("Zeitüberschreitung", `Timeout beim Lesen von CV ${cv}. Die Zentrale hat nicht geantwortet.`, 'error');
             }
         }, 500);
 
     } catch (e) {
-        alert("Fehler: " + e.message);
+        showCustomModal("Kommunikationsfehler", e.message, 'error');
     }
 }
 
@@ -543,28 +595,30 @@ async function z21WriteCV(cv, val) {
         showEnvironmentHint("CV Schreiben");
         return;
     }
-    try {
-        const resp = await fetch(`/cv-write?cv=${cv}&val=${val}`);
-        if (!resp.ok) throw new Error("Write request failed");
-    } catch (e) {
-        alert("Fehler: " + e.message);
+    
+    const isPom = document.getElementById('mode-pom')?.checked;
+    
+    if (isPom) {
+        const addr = prompt("Lok-Adresse für PoM:", "3");
+        if (!addr) return;
+        try {
+            const resp = await fetch(`/cv-write-pom?addr=${addr}&cv=${cv}&val=${val}`);
+            if (!resp.ok) throw new Error("PoM Write request failed");
+        } catch (e) {
+            showCustomModal("PoM Fehler", e.message, 'error');
+        }
+    } else {
+        try {
+            const resp = await fetch(`/cv-write?cv=${cv}&val=${val}`);
+            if (!resp.ok) throw new Error("Write request failed");
+        } catch (e) {
+            showCustomModal("Schreibfehler", e.message, 'error');
+        }
     }
 }
 
-async function z21WriteCVPoM(cv, val) {
-    if (!isLocalHost()) {
-        showEnvironmentHint("PoM Schreiben");
-        return;
-    }
-    const addr = prompt("Lok-Adresse für PoM:", "3");
-    if (!addr) return;
-    try {
-        const resp = await fetch(`/cv-write-pom?addr=${addr}&cv=${cv}&val=${val}`);
-        if (!resp.ok) throw new Error("PoM Write request failed");
-    } catch (e) {
-        alert("Fehler: " + e.message);
-    }
-}
+// z21WriteCVPoM is now consolidated into z21WriteCV
+
 
 function parseAndRenderDecoder(xmlDoc) {
     const getCTElement = (parent, name) => {
@@ -705,6 +759,7 @@ function parseAndRenderDecoder(xmlDoc) {
         });
     }
     updateDependencies();
+    updateModeUI();
 }
 
 function createLongAddrRow(groupNode, getCTElement) {

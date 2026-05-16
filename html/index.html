@@ -12,6 +12,20 @@
     <header>
         <h1 id="main-title">Dekoderprogrammierung</h1>
         <span class="license-notice">Daten: © <a href="https://www.decoderdb.de" target="_blank" rel="noopener">DecoderDB</a> · <a href="https://www.decoderdb.de/lizenz" target="_blank" rel="noopener">Lizenz</a></span>
+        
+        <div class="mode-selector">
+            <div class="mode-label">Modus:</div>
+            <div class="segmented-control">
+                <input type="radio" name="prog-mode" id="mode-pg" value="pg" checked>
+                <label for="mode-pg">Programmiergleis</label>
+                
+                <input type="radio" name="prog-mode" id="mode-pom" value="pom">
+                <label for="mode-pom">PoM</label>
+                
+                <div class="selection-slider"></div>
+            </div>
+        </div>
+
         <div class="header-right">
             <button id="main-back-btn" style="display: none;">&larr; Zurück zur Auswahl</button>
             <button id="theme-toggle" title="Design umschalten" aria-label="Darkmode/Lightmode umschalten">
@@ -167,19 +181,20 @@
         </div>
     </div>
 
-    <!-- Work in Progress Modal -->
-    <div id="wip-modal" class="modal" style="display: none;">
+    <!-- Generic Custom Modal -->
+    <div id="custom-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <div class="wip-icon">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-                    <circle cx="12" cy="12" r="5"/>
+            <div id="modal-icon" class="modal-icon-container">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
             </div>
-            <h3>Funktion folgt</h3>
-            <p>mittels M5Stack Atom S3 als WLAN-Bridge zu z21-kompatiblen Zentralen</p>
+            <h3 id="modal-title">Info</h3>
+            <p id="modal-text">Nachricht...</p>
             <div class="modal-actions">
-                <button id="wip-close" class="btn-secondary">Schließen</button>
+                <button id="modal-close" class="btn-secondary">Schließen</button>
             </div>
         </div>
     </div>
