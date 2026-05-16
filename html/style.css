@@ -194,7 +194,8 @@ body.light-mode .env-marker {
 }
 
 .mode-selector.is-viewer .segmented-control,
-.mode-selector.is-viewer .pom-addr-container {
+.mode-selector.is-viewer .pom-addr-container,
+.mode-selector.is-viewer > .mode-label {
     opacity: 0.5;
     pointer-events: none;
     filter: grayscale(0.8);

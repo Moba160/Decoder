@@ -1,6 +1,7 @@
 <!-- Last Build: 2026-05-16 01:26 -->
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,51 +9,64 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
         <div class="title-container">
             <h1 id="main-title">Dekoderprogrammierung</h1>
         </div>
-        <span class="license-notice">Daten: © <a href="https://www.decoderdb.de" target="_blank" rel="noopener">DecoderDB</a> · <a href="https://www.decoderdb.de/lizenz" target="_blank" rel="noopener">Lizenz</a></span>
-        
+        <span class="license-notice">Daten: © <a href="https://www.decoderdb.de" target="_blank"
+                rel="noopener">DecoderDB</a> · <a href="https://www.decoderdb.de/lizenz" target="_blank"
+                rel="noopener">Lizenz</a></span>
+
         <div class="mode-selector">
             <div class="mode-label">Modus:</div>
             <div class="segmented-control">
                 <input type="radio" name="prog-mode" id="mode-pg" value="pg">
                 <label for="mode-pg">Programmiergleis</label>
-                
+
                 <input type="radio" name="prog-mode" id="mode-pom" value="pom" checked>
                 <label for="mode-pom">PoM</label>
-                
+
                 <div class="selection-slider"></div>
             </div>
-            
+
             <div id="pom-addr-container" class="pom-addr-container">
                 <label for="pom-addr" class="mode-label">Adresse:</label>
-                <input type="number" id="pom-addr" class="pom-addr-input" value="3" min="1" max="10239" title="Lok-Adresse für PoM">
+                <input type="number" id="pom-addr" class="pom-addr-input" value="3" min="1" max="10239"
+                    title="Lok-Adresse für PoM">
             </div>
 
-            <span id="env-marker" class="env-marker" style="display: none;" title="'Trockenmodus'; auf einem ESP32 ausgeführt kann auch gelesen/geschrieben werden">Viewer-Modus</span>
+            <span id="env-marker" class="env-marker" style="display: none;"
+                title="Viewermodus; wenn auf einem ESP32 der FRANKY-Serie ausgeführt, kann auch gelesen/geschrieben werden">Viewer-Modus</span>
         </div>
 
         <div class="header-right">
             <button id="main-back-btn" style="display: none;">&larr; Zurück zur Auswahl</button>
             <button id="theme-toggle" title="Design umschalten" aria-label="Darkmode/Lightmode umschalten">
                 <!-- Moon icon (dark mode) -->
-                <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
                 <!-- Sun icon (light mode, hidden by default) -->
-                <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
-                    <circle cx="12" cy="12" r="5"/>
-                    <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                    fill="currentColor" style="display:none;">
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
                 </svg>
             </button>
         </div>
@@ -64,7 +78,8 @@
             <div class="selection-header">
                 <h2>Decoderauswahl <span id="decoder-count"></span></h2>
                 <div class="search-container">
-                    <input type="text" id="decoder-search" placeholder="Freitext-Suche (Name)..." autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off">
+                    <input type="text" id="decoder-search" placeholder="Freitext-Suche (Name)..." autocomplete="off"
+                        spellcheck="false" autocorrect="off" autocapitalize="off">
                     <div id="search-results" class="search-results-overlay" style="display: none;">
                         <div class="search-result-row">
                             <span id="res-manufacturer" class="res-label">Hersteller</span>
@@ -118,7 +133,8 @@
                     </div>
                     <div class="filter-group filter-group-preset">
                         <label>Voreinstellung</label>
-                        <button id="preset-spur-n" class="btn-preset-spur" title="L≤ 25mm, B≤ 15mm, H≤ 3mm">Spur N</button>
+                        <button id="preset-spur-n" class="btn-preset-spur" title="L≤ 25mm, B≤ 15mm, H≤ 3mm">Spur
+                            N</button>
                     </div>
                 </div>
                 <div class="filter-actions">
@@ -194,7 +210,8 @@
     <div id="custom-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <div id="modal-icon" class="modal-icon-container">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="16" x2="12" y2="12"></line>
                     <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -211,4 +228,5 @@
     <script src="files.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
