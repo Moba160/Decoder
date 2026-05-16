@@ -541,64 +541,6 @@ async function z21WriteCVPoM(cv, val) {
     }
 }
 
-async function z21ReadCV(cv, inputEl) {
-    try {
-        const resp = await fetch(`/cv-read?cv=${cv}`);
-        if (!resp.ok) throw new Error("Read request failed");
-        
-        // Start polling for result
-        const pollResult = async () => {
-            const r = await fetch('/cv-result');
-            const data = await r.json();
-            if (data.val >= 0) {
-                cvValues[cv] = data.val;
-                if (inputEl) {
-                    inputEl.value = data.val;
-                    // Trigger the oninput handler to update bits/UI
-                    inputEl.dispatchEvent(new Event('input'));
-                }
-                return true;
-            } else if (data.val === -2) {
-                alert(`Fehler beim Lesen von CV ${cv} (NACK)`);
-                return true;
-            }
-            return false;
-        };
-
-        let attempts = 0;
-        const interval = setInterval(async () => {
-            attempts++;
-            if (await pollResult() || attempts > 20) {
-                clearInterval(interval);
-                if (attempts > 20) alert(`Timeout beim Lesen von CV ${cv}`);
-            }
-        }, 500);
-
-    } catch (e) {
-        alert("Fehler: " + e.message);
-    }
-}
-
-async function z21WriteCV(cv, val) {
-    try {
-        const resp = await fetch(`/cv-write?cv=${cv}&val=${val}`);
-        if (!resp.ok) throw new Error("Write request failed");
-    } catch (e) {
-        alert("Fehler: " + e.message);
-    }
-}
-
-async function z21WriteCVPoM(cv, val) {
-    const addr = prompt("Lok-Adresse für PoM:", "3");
-    if (!addr) return;
-    try {
-        const resp = await fetch(`/cv-write-pom?addr=${addr}&cv=${cv}&val=${val}`);
-        if (!resp.ok) throw new Error("PoM Write request failed");
-    } catch (e) {
-        alert("Fehler: " + e.message);
-    }
-}
-
 function parseAndRenderDecoder(xmlDoc) {
     const getCTElement = (parent, name) => {
         const directMatch = Array.from(parent.children).find(c => 
