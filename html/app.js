@@ -13,7 +13,10 @@ let herstellerKennung = {};
  */
 function isLocalHost() {
     const h = window.location.hostname;
-    return h !== 'moba160.github.io' && h !== ''; 
+    // ESP32 usually has an IP like 192.168.x.x or a local domain.
+    // GitHub Pages, empty (file://), localhost, and 127.0.0.1 are viewers.
+    const viewers = ['moba160.github.io', '', 'localhost', '127.0.0.1'];
+    return !viewers.includes(h);
 }
 
 function showCustomModal(title, message, type = 'info') {
