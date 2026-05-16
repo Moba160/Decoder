@@ -169,11 +169,21 @@ async function init() {
 
 function updateModeUI() {
     const modePom = document.getElementById('mode-pom');
+    const pomAddrContainer = document.getElementById('pom-addr-container');
     if (!modePom) return;
     const isPom = modePom.checked;
+    
+    if (pomAddrContainer) {
+        pomAddrContainer.style.display = isPom ? 'flex' : 'none';
+    }
+    
     document.querySelectorAll('.btn-read').forEach(btn => {
         btn.disabled = isPom;
         btn.title = isPom ? "Steht bei PoM nicht zur Verfügung" : "Lesen";
+    });
+    
+    document.querySelectorAll('.btn-write').forEach(btn => {
+        btn.title = isPom ? "Schreiben (PoM)" : "Schreiben (PG)";
     });
 }
 
@@ -599,7 +609,8 @@ async function z21WriteCV(cv, val) {
     const isPom = document.getElementById('mode-pom')?.checked;
     
     if (isPom) {
-        const addr = prompt("Lok-Adresse für PoM:", "3");
+        const addrInput = document.getElementById('pom-addr');
+        const addr = addrInput ? addrInput.value : "3";
         if (!addr) return;
         try {
             const resp = await fetch(`/cv-write-pom?addr=${addr}&cv=${cv}&val=${val}`);
