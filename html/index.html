@@ -12,26 +12,27 @@
     <header>
         <div class="title-container">
             <h1 id="main-title">Dekoderprogrammierung</h1>
-            <span id="env-marker" class="env-marker" style="display: none;" title="'Trockenmodus'; auf einem ESP32 ausgeführt kann auch gelesen/geschrieben werden">Viewer-Modus</span>
         </div>
         <span class="license-notice">Daten: © <a href="https://www.decoderdb.de" target="_blank" rel="noopener">DecoderDB</a> · <a href="https://www.decoderdb.de/lizenz" target="_blank" rel="noopener">Lizenz</a></span>
         
         <div class="mode-selector">
             <div class="mode-label">Modus:</div>
             <div class="segmented-control">
-                <input type="radio" name="prog-mode" id="mode-pg" value="pg" checked>
+                <input type="radio" name="prog-mode" id="mode-pg" value="pg">
                 <label for="mode-pg">Programmiergleis</label>
                 
-                <input type="radio" name="prog-mode" id="mode-pom" value="pom">
+                <input type="radio" name="prog-mode" id="mode-pom" value="pom" checked>
                 <label for="mode-pom">PoM</label>
                 
                 <div class="selection-slider"></div>
             </div>
             
-            <div id="pom-addr-container" class="pom-addr-container" style="display: none;">
+            <div id="pom-addr-container" class="pom-addr-container">
                 <label for="pom-addr" class="mode-label">Adresse:</label>
                 <input type="number" id="pom-addr" class="pom-addr-input" value="3" min="1" max="10239" title="Lok-Adresse für PoM">
             </div>
+
+            <span id="env-marker" class="env-marker" style="display: none;" title="'Trockenmodus'; auf einem ESP32 ausgeführt kann auch gelesen/geschrieben werden">Viewer-Modus</span>
         </div>
 
         <div class="header-right">

@@ -181,23 +181,45 @@ async function init() {
 function updateModeUI() {
     const modePom = document.getElementById('mode-pom');
     const pomAddrContainer = document.getElementById('pom-addr-container');
+    const modePg = document.getElementById('mode-pg');
+    const pomAddrInput = document.getElementById('pom-addr');
+    const isViewer = !isLocalHost();
+    
     if (!modePom) return;
     const isPom = modePom.checked;
+    
+    // Grey out mode selector if viewer mode
+    if (isViewer) {
+        if (modePg) modePg.disabled = true;
+        if (modePom) modePom.disabled = true;
+        if (pomAddrInput) pomAddrInput.disabled = true;
+        document.querySelector('.mode-selector')?.classList.add('is-viewer');
+    }
     
     if (pomAddrContainer) {
         pomAddrContainer.style.display = isPom ? 'flex' : 'none';
     }
     
-    const pomAddrInput = document.getElementById('pom-addr');
     const addr = pomAddrInput ? pomAddrInput.value : "3";
     
     document.querySelectorAll('.btn-read').forEach(btn => {
-        btn.disabled = isPom;
-        btn.title = isPom ? "Steht bei PoM nicht zur Verfügung" : "Lesen";
+        if (isViewer) {
+            btn.disabled = true;
+            btn.title = "Viewer-Modus: Kein Hardware-Zugriff";
+        } else {
+            btn.disabled = isPom;
+            btn.title = isPom ? "Steht bei PoM nicht zur Verfügung" : "Lesen";
+        }
     });
     
     document.querySelectorAll('.btn-write').forEach(btn => {
-        btn.title = isPom ? `Schreiben (Lokadresse ${addr})` : "Schreiben (PG)";
+        if (isViewer) {
+            btn.disabled = true;
+            btn.title = "Viewer-Modus: Kein Hardware-Zugriff";
+        } else {
+            btn.disabled = false;
+            btn.title = isPom ? `Schreiben (Lokadresse ${addr})` : "Schreiben (PG)";
+        }
     });
 }
 

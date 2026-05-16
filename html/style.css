@@ -193,6 +193,16 @@ body.light-mode .env-marker {
     transform: translateX(100%);
 }
 
+.mode-selector.is-viewer {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(0.8);
+}
+
+.mode-selector.is-viewer .segmented-control label {
+    cursor: not-allowed;
+}
+
 .pom-addr-container {
     display: flex;
     align-items: center;
