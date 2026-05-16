@@ -157,7 +157,9 @@ async function init() {
     // Mode selector initialization
     const modePg = document.getElementById('mode-pg');
     const modePom = document.getElementById('mode-pom');
+    const pomAddrInput = document.getElementById('pom-addr');
     [modePg, modePom].forEach(el => el.addEventListener('change', updateModeUI));
+    if (pomAddrInput) pomAddrInput.addEventListener('input', updateModeUI);
 
     window.addEventListener('resize', () => {
         document.querySelectorAll('.speed-curve-canvas').forEach(c => drawSpeedCurve(c));
@@ -177,13 +179,16 @@ function updateModeUI() {
         pomAddrContainer.style.display = isPom ? 'flex' : 'none';
     }
     
+    const pomAddrInput = document.getElementById('pom-addr');
+    const addr = pomAddrInput ? pomAddrInput.value : "3";
+    
     document.querySelectorAll('.btn-read').forEach(btn => {
         btn.disabled = isPom;
         btn.title = isPom ? "Steht bei PoM nicht zur Verfügung" : "Lesen";
     });
     
     document.querySelectorAll('.btn-write').forEach(btn => {
-        btn.title = isPom ? "Schreiben (PoM)" : "Schreiben (PG)";
+        btn.title = isPom ? `Schreiben (Lokadresse ${addr})` : "Schreiben (PG)";
     });
 }
 
