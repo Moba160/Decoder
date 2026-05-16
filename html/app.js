@@ -7,6 +7,19 @@ let currentResetCommand = "8=8";
 let totalDecoderCount = 0;
 let herstellerKennung = {};
 
+/**
+ * Prüft, ob die Anwendung lokal auf einem ESP32 läuft.
+ * GitHub Pages läuft unter moba160.github.io.
+ */
+function isLocalHost() {
+    const h = window.location.hostname;
+    return h !== 'moba160.github.io' && h !== ''; 
+}
+
+function showEnvironmentHint(feature) {
+    alert(`Die Funktion "${feature}" ist nur verfügbar, wenn der Decoder-Programmer direkt auf einem FRANKY-Gerät (ESP32) läuft.\n\nIm aktuellen Modus (GitHub Pages) dient die Seite als reiner Viewer.`);
+}
+
 function updateDecoderCount(count) {
     const el = document.getElementById('decoder-count');
     if (el) {
@@ -484,6 +497,10 @@ function showWipModal() {
 }
 
 async function z21ReadCV(cv, inputEl) {
+    if (!isLocalHost()) {
+        showEnvironmentHint("CV Lesen");
+        return;
+    }
     try {
         const resp = await fetch(`/cv-read?cv=${cv}`);
         if (!resp.ok) throw new Error("Read request failed");
@@ -522,6 +539,10 @@ async function z21ReadCV(cv, inputEl) {
 }
 
 async function z21WriteCV(cv, val) {
+    if (!isLocalHost()) {
+        showEnvironmentHint("CV Schreiben");
+        return;
+    }
     try {
         const resp = await fetch(`/cv-write?cv=${cv}&val=${val}`);
         if (!resp.ok) throw new Error("Write request failed");
@@ -531,6 +552,10 @@ async function z21WriteCV(cv, val) {
 }
 
 async function z21WriteCVPoM(cv, val) {
+    if (!isLocalHost()) {
+        showEnvironmentHint("PoM Schreiben");
+        return;
+    }
     const addr = prompt("Lok-Adresse für PoM:", "3");
     if (!addr) return;
     try {
